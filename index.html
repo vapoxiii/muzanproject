@@ -278,17 +278,10 @@
   .scanbtn{border:1px solid var(--hot1); background:transparent; color:var(--hot2); border-radius:7px; padding:10px 14px; font-weight:800; font-size:13px; cursor:pointer; margin-top:6px}
   .scanbtn:active{transform:scale(.98)}
   .scanner{position:fixed; inset:0; background:#000; z-index:70; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px}
-  .scanner video{width:100%; max-width:400px; border-radius:16px; margin-bottom:20px}
   #scanvideo{position:relative; width:100%; max-width:400px; border-radius:16px; overflow:hidden; margin-bottom:20px; background:#111}
   #scanvideo video, #scanvideo canvas{width:100%; display:block}
   #scanvideo canvas{position:absolute; top:0; left:0}
-  .scanner .msg{color:#fff; font-size:14px; font-weight:700; text-align:center; margin-bottom:12px}
   .scanner .close{position:absolute; top:calc(14px + env(safe-area-inset-top)); right:16px; width:40px; height:40px; border-radius:50%; border:none; background:rgba(255,255,255,.2); color:#fff; font-size:18px; cursor:pointer}
-  .scanres{background:#16131E; border:1px solid var(--line); border-radius:14px; padding:15px; margin-top:10px; width:100%; max-width:400px}
-  .scanres .pn{font-size:15px; font-weight:800; margin-bottom:3px; color:var(--txt)}
-  .scanres .pk{font-size:12px; color:var(--muted); font-weight:700}
-  .scanres button{width:100%; border:none; background:linear-gradient(135deg,var(--hot1),var(--hot2)); color:#15101F; border-radius:11px; padding:10px; font-weight:850; font-size:13px; cursor:pointer; margin-top:10px}
-  .scanres button:active{transform:scale(.98)}
   .phcompare{display:flex; gap:8px; margin-bottom:10px}
   .cmpcol{flex:1; background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden}
   .cmpcol img{width:100%; aspect-ratio:3/4; object-fit:cover; display:block}
@@ -585,6 +578,60 @@
   .xpt{position:fixed; left:50%; bottom:calc(80px + env(safe-area-inset-bottom)); z-index:70; padding:8px 14px 6px; background:var(--card); border:1px solid rgba(196,167,255,.35); color:var(--hot2); font-family:var(--display); font-size:20px; letter-spacing:.03em; opacity:0; transform:translate(-50%,12px); pointer-events:none; transition:opacity .2s ease, transform .2s ease}
   .xpt.on{opacity:1; transform:translate(-50%,0)}
   @media (prefers-reduced-motion:reduce){ .moment,.moment *{animation:none !important} .ring-v,.hd-p,.hd-bar i{transition:none} }
+
+  /* ===== v6 : scanner indépendant, clé IA ===== */
+  .capt{display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:8px; margin-top:2px}
+  .capt .aibtn{margin-top:0}
+  .scanopen{display:flex; align-items:center; justify-content:center; gap:8px; border:1.5px solid rgba(196,167,255,.6); border-radius:0; background:transparent; color:var(--txt); font-family:var(--display); font-size:21px; letter-spacing:.03em; cursor:pointer}
+  .scanopen:active{transform:scale(.97)}
+  .aisec{display:block; width:100%; min-height:44px; margin-top:6px; border:0; background:none; color:var(--hot2); font-family:inherit; font-size:13px; font-weight:700; cursor:pointer}
+  .scanner{background:#09090D; z-index:70; justify-content:flex-start; padding:calc(env(safe-area-inset-top) + 64px) 16px calc(env(safe-area-inset-bottom) + 20px); overflow-y:auto}
+  .scan-t{margin:0 0 14px; font-family:var(--display); font-size:24px; line-height:1; letter-spacing:.03em; color:var(--txt); text-align:center}
+  .scan-cam{position:relative; width:100%; max-width:400px; aspect-ratio:4/3; flex:0 0 auto; border-radius:14px; overflow:hidden; background:#111}
+  #scanvideo{position:absolute; inset:0}
+  #scanvideo video{width:100%; height:100%; object-fit:cover; display:block; background:#111}
+  .scan-frame{position:absolute; left:10%; right:10%; top:27%; bottom:27%; border-radius:6px; box-shadow:0 0 0 999px rgba(0,0,0,.42); pointer-events:none}
+  .scan-frame i{position:absolute; width:22px; height:22px; border:0 solid var(--hot2)}
+  .scan-frame i:nth-child(1){left:-2px; top:-2px; border-width:3px 0 0 3px; border-top-left-radius:6px}
+  .scan-frame i:nth-child(2){right:-2px; top:-2px; border-width:3px 3px 0 0; border-top-right-radius:6px}
+  .scan-frame i:nth-child(3){left:-2px; bottom:-2px; border-width:0 0 3px 3px; border-bottom-left-radius:6px}
+  .scan-frame i:nth-child(4){right:-2px; bottom:-2px; border-width:0 3px 3px 0; border-bottom-right-radius:6px}
+  .scan-frame b{position:absolute; left:6%; right:6%; top:10%; height:2px; background:linear-gradient(90deg,transparent,var(--hot2),transparent); animation:scanLine 2s ease-in-out infinite alternate}
+  @keyframes scanLine{from{top:10%} to{top:88%}}
+  .scan-cam.done{display:none}
+  .scanres{width:100%; max-width:400px; margin-top:14px; padding:0; border:0; background:none}
+  .sr-msg{margin:6px 0 0; text-align:center; font-size:14px; font-weight:600; line-height:1.45; color:rgba(245,245,247,.78)}
+  .sr-msg.err{color:#FF8A87}
+  .sr-name{font-family:var(--display); font-size:26px; line-height:1.05; color:var(--txt)}
+  .sr-brand{margin-top:3px; font-size:12.5px; font-weight:600; color:rgba(245,245,247,.6)}
+  .sr-per{margin-top:8px; font-size:13px; font-weight:700; color:var(--hot2)}
+  .sr-q{margin-top:14px; display:flex; align-items:center; justify-content:space-between; gap:12px}
+  .sr-q label{font-size:13px; font-weight:700; color:rgba(245,245,247,.75)}
+  .sr-qi{display:flex; align-items:center; gap:8px}
+  .sr-qi input{width:96px; height:46px; border:1px solid rgba(245,245,247,.2); border-radius:6px; background:#0D0B13; color:var(--txt); font-family:var(--display); font-size:26px; text-align:center}
+  .sr-qi span{font-size:14px; font-weight:700; color:rgba(245,245,247,.6)}
+  .sr-chips{margin-top:10px; display:flex; flex-wrap:wrap; gap:8px}
+  .sr-chips button{width:auto; min-height:40px; padding:0 14px; border:1px solid rgba(245,245,247,.16); border-radius:4px; background:rgba(245,245,247,.04); color:var(--txt); font-family:inherit; font-size:13px; font-weight:700; cursor:pointer}
+  .sr-chips button.on{background:rgba(139,92,246,.22); border-color:var(--hot1)}
+  .sr-tot{margin-top:14px; padding:12px 0; border-top:1px solid rgba(245,245,247,.1); border-bottom:1px solid rgba(245,245,247,.1); display:flex; align-items:baseline; gap:8px; font-size:13px; font-weight:600; color:rgba(245,245,247,.65)}
+  .sr-tot b{font-family:var(--display); font-weight:400; font-size:32px; line-height:1; color:var(--txt)}
+  .sr-add,.sr-again{display:block; width:100%; margin-top:12px; height:50px; border:0; border-radius:0; font-family:var(--display); font-size:21px; letter-spacing:.03em; cursor:pointer}
+  .sr-add{background:var(--hot1); color:var(--txt); clip-path:polygon(0 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%)}
+  .sr-again{background:transparent; border:1.5px solid rgba(196,167,255,.6); color:var(--txt)}
+  .key-p{margin:2px 0 10px; font-size:13px; font-weight:600; line-height:1.5; color:rgba(245,245,247,.75)}
+  .key-s{margin:0 0 14px; padding-left:20px; font-size:13px; font-weight:600; line-height:1.55; color:rgba(245,245,247,.75)}
+  .key-s b{color:var(--txt)}
+  #keyin{width:100%; height:48px; padding:0 12px; border:1px solid rgba(245,245,247,.2); border-radius:6px; background:#0D0B13; color:var(--txt); font-size:16px; font-family:inherit}
+  .key-msg{min-height:20px; margin:8px 0 6px; font-size:13px; font-weight:700; line-height:1.4; color:var(--hot2)}
+  .key-msg.err{color:#FF8A87}
+  .key-del{display:block; width:100%; min-height:44px; margin-top:4px; border:0; background:none; color:rgba(245,245,247,.6); font-family:inherit; font-size:13px; font-weight:700; cursor:pointer}
+  .key-n{margin:8px 0 0; font-size:12px; font-weight:600; line-height:1.45; color:rgba(245,245,247,.5)}
+  .pf-s{font-size:12.5px; font-weight:700; color:rgba(245,245,247,.55)}
+  .pf-s[data-on="1"]{color:var(--hot2)}
+  .ai-err{margin:4px 0 0}
+  .ai-err .err{margin-bottom:12px}
+  .ai-err button.aisec{margin-top:2px}
+  @media (prefers-reduced-motion:reduce){ .scan-frame b{animation:none} }
 </style>
 </head>
 <body>
@@ -689,7 +736,7 @@
     </div>
     <div id="meallog" class="meallog"></div>
     <div class="quickrow" id="quickrow"></div>
-    <button class="aibtn" id="aibtn">Décrire mon repas</button>
+    <div class="capt"><button class="aibtn" id="aibtn">Décrire mon repas</button><button type="button" class="scanopen" id="scanOpen"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8V5.5A1.5 1.5 0 0 1 4.5 4H7M17 4h2.5A1.5 1.5 0 0 1 21 5.5V8M21 16v2.5a1.5 1.5 0 0 1-1.5 1.5H17M7 20H4.5A1.5 1.5 0 0 1 3 18.5V16"/><path d="M7 9v6M10.5 9v6M13.5 9v6M17 9v6"/></svg><span>Scanner</span></button></div>
     <div class="mealbtns">
       <button class="addfood" id="openpick">Ajouter un aliment</button>
       <button class="reportp" id="reportp">Reporter prot.</button>
@@ -795,6 +842,9 @@
     <div class="pf-row"><span class="pf-k">Protéines</span><span class="pf-v">190 g par jour</span></div>
     <div class="pf-row"><span class="pf-k">Programme</span><span class="pf-v">4 séances par semaine</span></div>
     <p class="pf-hint">Lundi Haut A, mardi Bas A, jeudi Haut B, vendredi Bas B. Natation le mercredi et le samedi, repos le dimanche.</p>
+    <div class="subhead sh2"><span class="t">Assistant IA</span></div>
+    <div class="pf-row"><span class="pf-k">Analyse des repas</span><span class="pf-s" id="pfAiS" data-on="0">Non connectée</span><button type="button" class="pf-b" id="pfAiB">Ajouter ma clé</button></div>
+    <p class="pf-hint">Sans clé, le scanner et la saisie manuelle fonctionnent quand même.</p>
     <div class="subhead sh2"><span class="t">Données</span></div>
     <button class="resetbtn" id="reset">Réinitialiser cette semaine</button>
     <div class="foot">Tes coches sont sauvegardées automatiquement, en local sur ton téléphone.</div>
@@ -808,11 +858,11 @@
   <button type="button" class="tab" data-view="profile"><svg class="ti" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.2" r="3.6"/><path d="M5 20c1.1-3.6 3.9-5.6 7-5.6s5.9 2 7 5.6"/></svg><span>Profil</span></button>
 </nav>
 <div id="lightbox" class="lightbox" hidden><img id="lbimg" alt="Photo"><button id="lbclose" class="lbclose" aria-label="Fermer">✕</button></div>
-<div id="scanner" class="scanner" hidden>
+<div id="scanner" class="scanner" hidden role="dialog" aria-modal="true" aria-label="Scanner un produit">
   <button class="close" id="scanclose" aria-label="Fermer">✕</button>
-  <div class="msg">Pointe le code-barres vers la caméra</div>
-  <div id="scanvideo"></div>
-  <div id="scanres"></div>
+  <p class="scan-t" id="scanmsg">Place le code-barres dans le cadre</p>
+  <div class="scan-cam"><div id="scanvideo"></div><div class="scan-frame" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></div></div>
+  <div id="scanres" class="scanres" aria-live="polite"></div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
 <div id="aimodal" class="modal" hidden><div class="sheet">
@@ -821,9 +871,24 @@
     <textarea id="aitext" placeholder="Ex. pâtes bolo avec du fromage râpé, une omelette 3 œufs, kebab poulet frites…"></textarea>
     <div class="hint">Écris simplement, comme tu le dirais. L'IA identifie les aliments, puis te pose 2-3 questions rapides.</div>
     <button class="aibtn" id="aigo">Analyser</button>
+    <button type="button" class="aisec" id="aiscan">Scanner un produit à la place</button>
   </div>
   <div id="aistep2" hidden></div>
   <div id="aistep3" hidden></div>
+</div></div>
+<div id="keymodal" class="modal" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="keyT">
+  <div class="sheeth"><span class="st" id="keyT">Connecter l’IA</span><button id="keyclose" aria-label="Fermer">✕</button></div>
+  <p class="key-p">L’analyse des repas utilise ton propre compte Anthropic (différent de ton abonnement Claude). Compte environ un centime par repas au maximum.</p>
+  <ol class="key-s">
+    <li>Va sur <b>console.anthropic.com</b> et crée un compte.</li>
+    <li>Dans <b>Billing</b>, ajoute quelques dollars de crédit.</li>
+    <li>Dans <b>API keys</b>, crée une clé et colle-la ici.</li>
+  </ol>
+  <input id="keyin" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="sk-ant-…" aria-label="Clé API Anthropic">
+  <p class="key-msg" id="keymsg" role="status"></p>
+  <button class="aibtn" id="keysave">Enregistrer et tester</button>
+  <button type="button" class="key-del" id="keydel">Supprimer la clé</button>
+  <p class="key-n">La clé reste sur ton téléphone. Ne la partage jamais et ne la mets pas dans GitHub.</p>
 </div></div>
 <div id="moment" class="moment" hidden role="dialog" aria-modal="true" aria-label="Séance validée">
   <div class="mo-stage">
@@ -1189,68 +1254,129 @@ document.getElementById('lightbox').addEventListener('click',e=>{ if(e.target.id
 loadPhotos(); renderPhotos();
 
 // ---- Scanner code-barres + Open Food Facts ----
-let scanCurQ=null;
-let scanActive=false;
-async function scanStart(qid){ scanCurQ=qid; document.getElementById('scanner').hidden=false;
-  const vbox=document.getElementById('scanvideo'); const sr=document.getElementById('scanres'); sr.innerHTML='';
-  vbox.innerHTML='';
-  if(scanActive){ try{ Quagga.stop(); }catch(e){} scanActive=false; }
-
-  // Vérifie d'abord l'accès caméra lui-même pour donner un message d'erreur précis
+let scanMode='meal', scanCurQ=null, scanActive=false, scanLast='', scanProd=null, scanBusy=false;
+let scanStream=null, scanVideo=null, scanTimer=null, scanTick=0;
+const SCAN_STRATS=[{locate:false},{locate:true,p:'medium'},{locate:false},{locate:true,p:'large'}];
+const SCAN_CV=document.createElement('canvas');
+function scanStart(qid){ scanOpen('question',qid); }
+function scanSetMsg(t){ const m=document.getElementById('scanmsg'); if(m)m.textContent=t; }
+function scanRes(html){ document.getElementById('scanres').innerHTML=html; }
+function scanHalt(){
+  scanActive=false; clearTimeout(scanTimer);
+  if(scanStream){ try{ scanStream.getTracks().forEach(t=>t.stop()); }catch(e){} scanStream=null; }
+  scanVideo=null;
+}
+function scanStop(){ scanHalt(); document.getElementById('scanner').hidden=true; document.getElementById('scanvideo').innerHTML=''; scanCurQ=null; scanProd=null; scanBusy=false; }
+function scanFail(msg,showRetry){
+  scanHalt(); document.querySelector('.scan-cam').classList.add('done');
+  scanRes('<p class="sr-msg err">'+esc(msg)+'</p>'+(showRetry?'<button type="button" class="sr-again" id="scanAgain">Scanner à nouveau</button>':''));
+  const b=document.getElementById('scanAgain'); if(b)b.onclick=()=>scanOpen(scanMode,scanCurQ);
+}
+async function scanOpen(mode,qid){
+  scanHalt();
+  scanMode=mode||'meal'; scanCurQ=qid||null; scanLast=''; scanProd=null; scanBusy=false; scanTick=0;
+  document.getElementById('scanner').hidden=false;
+  document.querySelector('.scan-cam').classList.remove('done');
+  scanSetMsg('Place le code-barres dans le cadre'); scanRes('');
+  const box=document.getElementById('scanvideo'); box.innerHTML='';
+  if(typeof Quagga==='undefined'){ scanSetMsg('Scanner indisponible'); scanFail('Le module de lecture n’a pas pu se charger. Vérifie ta connexion puis réessaie.',true); return; }
+  let stream;
   try{
-    const test=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
-    test.getTracks().forEach(t=>t.stop());
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw {name:'Unsupported'};
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});
   }catch(e){
-    if(e.name==='NotAllowedError'||e.name==='PermissionDeniedError'){
-      sr.innerHTML='<div style="color:#FF8A87;font-weight:700">Accès caméra refusé. Va dans Réglages → Safari → Caméra, et autorise ce site.</div>';
-    } else if(e.name==='NotFoundError'){
-      sr.innerHTML='<div style="color:#FF8A87;font-weight:700">Aucune caméra trouvée sur cet appareil.</div>';
-    } else {
-      sr.innerHTML='<div style="color:#FF8A87;font-weight:700">Caméra indisponible ('+e.name+').</div>';
-    }
+    const n=e&&e.name; scanSetMsg('Caméra indisponible');
+    if(n==='NotAllowedError'||n==='PermissionDeniedError')scanFail('Accès à la caméra refusé. Dans Réglages > Safari > Caméra, autorise ce site, puis rouvre l’app.',true);
+    else if(n==='NotFoundError')scanFail('Aucune caméra trouvée sur cet appareil.',false);
+    else scanFail('La caméra n’est pas disponible ici ('+(n||'erreur')+').',true);
     return;
   }
-
-  try{
-    Quagga.init({
-      inputStream:{type:'LiveStream', target:vbox,
-        constraints:{width:{min:320},height:{min:240},aspectRatio:{min:1,max:2},facingMode:'environment'}},
-      locator:{patchSize:'medium', halfSample:true},
-      numOfWorkers:0,
-      decoder:{readers:['ean_reader','ean_8_reader']}
-    }, err=>{
-      if(err){ console.error(err); sr.innerHTML='<div style="color:#FF8A87;font-weight:700">Impossible de démarrer le scan. Réessaie.</div>'; return; }
-      Quagga.start(); scanActive=true;
-      Quagga.onDetected(res=>{
-        if(!res.codeResult || !scanActive)return;
-        const code=res.codeResult.code; Quagga.stop(); scanActive=false; scanLookup(code);
-      });
+  if(document.getElementById('scanner').hidden){ stream.getTracks().forEach(t=>t.stop()); return; }   // fermé pendant la demande d'accès
+  scanStream=stream;
+  const v=document.createElement('video'); v.setAttribute('playsinline',''); v.setAttribute('webkit-playsinline',''); v.muted=true; v.autoplay=true; v.srcObject=stream;
+  box.appendChild(v); scanVideo=v;
+  try{ await v.play(); }catch(e){}
+  scanActive=true; scanLoop();
+}
+async function scanLoop(){
+  if(!scanActive||!scanVideo)return;
+  const v=scanVideo;
+  if(v.readyState>=2&&v.videoWidth){
+    const W=Math.min(960,v.videoWidth), H=Math.round(v.videoHeight*W/v.videoWidth);
+    SCAN_CV.width=W; SCAN_CV.height=H; SCAN_CV.getContext('2d').drawImage(v,0,0,W,H);
+    const st=SCAN_STRATS[scanTick++%SCAN_STRATS.length], src=SCAN_CV.toDataURL('image/jpeg',0.85);
+    const code=await new Promise(res=>{
+      let done=false; const to=setTimeout(()=>{ if(!done){ done=true; res(null); } },2000);
+      try{
+        Quagga.decodeSingle({src:src,numOfWorkers:0,inputStream:{size:W},locate:st.locate,locator:{patchSize:st.p||'medium',halfSample:true},
+          decoder:{readers:['ean_reader','ean_8_reader','upc_reader']}},r=>{ if(done)return; done=true; clearTimeout(to); res(r&&r.codeResult?r.codeResult.code:null); });
+      }catch(e){ done=true; clearTimeout(to); res(null); }
     });
-  }catch(e){ sr.innerHTML='<div style="color:#FF8A87;font-weight:700">Erreur caméra</div>'; }
+    if(scanActive&&code)scanOnCode(code);
+  }
+  if(scanActive)scanTimer=setTimeout(scanLoop,50);
 }
-function scanStop(){ if(scanActive){ try{ Quagga.stop(); }catch(e){} scanActive=false; } document.getElementById('scanner').hidden=true; scanCurQ=null; }
+function scanOnCode(code){
+  if(!scanActive||scanBusy)return;
+  if(code!==scanLast){ scanLast=code; return; }   // deux lectures identiques de suite : évite les fausses détections
+  scanBusy=true; scanHalt(); scanLookup(code);
+}
+function offNum(n,k){ const v=n&&n[k]; const x=typeof v==='string'?parseFloat(v):v; return (typeof x==='number'&&isFinite(x))?x:null; }
 async function scanLookup(code){
-  const sr=document.getElementById('scanres'); sr.innerHTML='<div style="text-align:center;color:var(--muted);padding:20px"><i style="width:16px;height:16px;border:2.5px solid #322C3F;border-top-color:var(--hot1);border-radius:50%;animation:sp .8s linear infinite;display:inline-block"></i></div>';
+  document.querySelector('.scan-cam').classList.add('done');
+  scanSetMsg('Produit détecté'); scanRes('<p class="sr-msg">Recherche du produit…</p>');
+  let d=null;
   try{
-    const r=await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
-    const d=await r.json();
-    if(!d.product){sr.innerHTML='<div style="color:var(--muted2);font-weight:700;padding:10px">Produit non trouvé</div>'; return;}
-    const p=d.product; const k=p.energy_kcal_100g||0, pr=(p.proteins_100g||0);
-    sr.innerHTML=`<div class="pn">${p.product_name||'Produit'}</div><div class="pk">${k} kcal · ${pr.toFixed(1)} g prot. / 100g</div>
-      <div class="pk" style="margin-top:8px">Quantité (g) <input type="text" id="scanqty" value="100" style="width:60px;border:1px solid var(--line);background:#0D0B13;color:var(--txt);border-radius:8px;padding:5px;font-weight:700" inputmode="numeric"></div>
-      <button onclick="scanConfirm('${code}','${(k||0).toFixed(0)}','${(pr||0).toFixed(1)}')">Ajouter</button>`;
-    setTimeout(()=>document.getElementById('scanqty').focus(),100);
-  }catch(e){ sr.innerHTML='<div style="color:var(--muted2);font-weight:700;padding:10px">Erreur réseau</div>'; }
+    const r=await fetch('https://world.openfoodfacts.org/api/v2/product/'+encodeURIComponent(code)+'.json?fields=code,product_name,generic_name,brands,nutriments,serving_quantity');
+    d=await r.json();
+  }catch(e){ scanFail('Impossible de joindre Open Food Facts. Vérifie ta connexion.',true); return; }
+  if(!d||d.status!==1||!d.product){ scanFail('Produit introuvable dans la base Open Food Facts ('+code+').',true); return; }
+  const p=d.product, n=p.nutriments||{};
+  let kcal=offNum(n,'energy-kcal_100g'); if(kcal==null){ const kj=offNum(n,'energy_100g'); if(kj!=null)kcal=kj/4.184; }
+  const prot=offNum(n,'proteins_100g');
+  if(kcal==null){ scanFail('Ce produit n’a pas de valeurs nutritionnelles dans la base. Essaie un autre produit.',true); return; }
+  const brand=String(p.brands||'').split(',')[0].trim();
+  scanProd={code:code, name:(p.product_name||p.generic_name||'Produit scanné').trim(), brand:brand, k:kcal, p:prot==null?0:prot, noProt:prot==null, serving:parseFloat(p.serving_quantity)||0};
+  scanRender();
 }
-window.scanConfirm=function(code,k,pr){ const qty=parseFloat(document.getElementById('scanqty').value)||100;
-  const kcal=Math.round(k*qty/100), prot=Math.round(pr*qty*10/100)/10;
-  if(scanCurQ && aiData.questions){ const q=aiData.questions.find(x=>x.id===scanCurQ);
-    if(q){ aiSlider[scanCurQ]={val:qty, kcal:kcal, prot:prot, name:code};
-      aiAnswers[scanCurQ]=-1; renderQuestions(); } }
-  scanStop();
-};
+function scanRender(){
+  const P=scanProd; if(!P)return;
+  const def=P.serving>0?Math.round(P.serving):100;
+  const chips=[]; if(P.serving>0)chips.push({v:Math.round(P.serving),l:'1 portion · '+Math.round(P.serving)+' g'}); [50,100,150,200].forEach(v=>{ if(!chips.some(c=>c.v===v))chips.push({v:v,l:v+' g'}); });
+  scanSetMsg('Produit trouvé');
+  scanRes('<div class="sr-name">'+esc(P.name)+'</div>'+(P.brand?'<div class="sr-brand">'+esc(P.brand)+'</div>':'')+
+    '<div class="sr-per num">'+Math.round(P.k)+' kcal · '+(P.noProt?'protéines non renseignées':P.p.toFixed(1).replace('.',',')+' g de protéines')+' pour 100 g</div>'+
+    '<div class="sr-q"><label for="scanqty">Quantité</label><div class="sr-qi"><input id="scanqty" type="text" inputmode="decimal" value="'+def+'"><span>g</span></div></div>'+
+    '<div class="sr-chips" id="srChips">'+chips.map(c=>'<button type="button" data-v="'+c.v+'">'+esc(c.l)+'</button>').join('')+'</div>'+
+    '<div class="sr-tot"><b class="num" id="srK">0</b> kcal <span>·</span> <b class="num" id="srP">0</b> g de protéines</div>'+
+    '<button type="button" class="sr-add" id="scanAdd">'+(scanMode==='question'?'Utiliser pour cette question':'Ajouter à ma journée')+'</button>'+
+    '<button type="button" class="sr-again" id="scanAgain">Scanner un autre produit</button>');
+  const inp=document.getElementById('scanqty');
+  const qty=()=>{ const q=parseFloat(String(inp.value).replace(',','.')); return (isFinite(q)&&q>0)?Math.min(q,5000):0; };
+  const upd=()=>{ const q=qty();
+    document.getElementById('srK').textContent=nf(P.k*q/100); document.getElementById('srP').textContent=(P.p*q/100).toFixed(1).replace('.',',');
+    document.querySelectorAll('#srChips button').forEach(b=>b.classList.toggle('on',+b.getAttribute('data-v')===q)); };
+  inp.addEventListener('input',upd);
+  document.querySelectorAll('#srChips button').forEach(b=>b.onclick=()=>{ inp.value=b.getAttribute('data-v'); upd(); });
+  document.getElementById('scanAgain').onclick=()=>scanOpen(scanMode,scanCurQ);
+  document.getElementById('scanAdd').onclick=()=>{ const q=qty(); if(!q){ inp.focus(); return; } scanConfirm(q); };
+  upd();
+}
+function scanConfirm(qty){
+  const P=scanProd; if(!P)return;
+  const kcal=Math.round(P.k*qty/100), prot=Math.round(P.p*qty/100*10)/10, short=P.name.length>38?P.name.slice(0,36)+'…':P.name;
+  if(scanMode==='question'&&scanCurQ&&aiData){
+    aiSlider[scanCurQ]={val:qty,kcal:kcal,prot:prot,name:short}; aiAnswers[scanCurQ]=-1; renderQuestions(); scanStop(); return;
+  }
+  const u=qty+' g'; let f=foodlib.find(x=>x.bc===P.code&&x.u===u);
+  if(!f){ f={id:'c'+Date.now(),n:short+' · '+u,k:kcal,p:prot,u:u,fav:1,bc:P.code}; foodlib.push(f); saveFoodlib(); }
+  logFood(f.id);
+  scanStop(); try{ aiClose(); }catch(e){}
+  const t=document.getElementById('xpToast'); if(t){ t.textContent='+'+kcal+' kcal ajoutés'; t.classList.remove('on'); void t.offsetWidth; t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),1600); }
+}
+document.getElementById('scanOpen').onclick=()=>scanOpen('meal');
+document.getElementById('aiscan').onclick=()=>{ aiClose(); scanOpen('meal'); };
 document.getElementById('scanclose').onclick=scanStop;
-document.getElementById('scanner').addEventListener('click',e=>{ if(e.target.id==='scanner')scanStop(); });
 // ---- Historique & série ----
 function weekScore(d){
   if(!d)return 0;
@@ -1287,8 +1413,92 @@ function aiReset(){ aiData=null; aiAnswers={}; aiEstim=null; aiSlider={}; aiOpen
   document.getElementById('aistep1').hidden=false; document.getElementById('aistep2').hidden=true; document.getElementById('aistep3').hidden=true;
   document.getElementById('aistep2').innerHTML=''; document.getElementById('aistep3').innerHTML='';
 }
+// ---- Clé IA personnelle (stockée uniquement sur le téléphone) ----
+const AI_MODEL='claude-haiku-4-5-20251001', KEYK='ai:key';
+let aiPendingTxt='';
+function aiKey(){ try{ return (sget(KEYK)||'').trim(); }catch(e){ return ''; } }
+function renderAiStatus(){
+  const s=document.getElementById('pfAiS'); if(!s)return; const on=!!aiKey();
+  s.textContent=on?'Connectée':'Non connectée'; s.setAttribute('data-on',on?'1':'0');
+  document.getElementById('pfAiB').textContent=on?'Modifier':'Ajouter ma clé';
+}
+async function aiCall(prompt,maxTokens,keyOverride){
+  const key=keyOverride||aiKey();
+  if(!key){ const e=new Error('nokey'); e.code='nokey'; throw e; }
+  let r;
+  try{
+    r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:AI_MODEL,max_tokens:maxTokens,messages:[{role:'user',content:prompt}]})});
+  }catch(e){ const er=new Error('network'); er.code='network'; throw er; }
+  let d=null; try{ d=await r.json(); }catch(e){}
+  if(!r.ok){
+    const msg=(d&&d.error&&d.error.message)||''; const er=new Error(msg||('HTTP '+r.status)); er.status=r.status;
+    er.code=(r.status===401||r.status===403)?'auth':(/credit|balance/i.test(msg)?'credit':(r.status===429?'rate':(r.status>=500?'busy':'http')));
+    throw er;
+  }
+  return {text:((d&&d.content)||[]).filter(x=>x.type==='text').map(x=>x.text).join('\n'), stop:d&&d.stop_reason};
+}
+function aiErrMsg(e){
+  switch(e&&e.code){
+    case 'network': return 'Impossible de joindre l’IA. Vérifie ta connexion.';
+    case 'auth': return 'Clé refusée par Anthropic. Vérifie-la dans Profil.';
+    case 'credit': return 'Crédit insuffisant sur ton compte Anthropic. Ajoute quelques dollars dans Billing.';
+    case 'rate': return 'Trop de demandes. Réessaie dans quelques secondes.';
+    case 'busy': return 'Le service est saturé. Réessaie dans un instant.';
+    case 'trunc': case 'parse': return 'L’IA a donné une réponse incomplète. Réessaie.';
+    default: return 'L’IA a répondu par une erreur'+(e&&e.status?' ('+e.status+')':'')+'.';
+  }
+}
+function aiBtns(items){
+  const s2=document.getElementById('aistep2'); const box=document.createElement('div'); box.className='ai-err';
+  items.forEach(it=>{ if(it.msg){ const d=document.createElement('div'); d.className='err'; d.textContent=it.msg; box.appendChild(d); return; }
+    const b=document.createElement('button'); b.type='button'; b.className=it.cls; b.textContent=it.t; b.onclick=it.fn; box.appendChild(b); });
+  s2.innerHTML=''; s2.appendChild(box);
+}
+function aiNoKey(txt){
+  aiPendingTxt=txt; document.getElementById('aistep1').hidden=true; document.getElementById('aistep2').hidden=false;
+  aiBtns([{msg:'L’analyse IA n’est pas encore connectée. Ajoute ta clé personnelle (2 minutes, une seule fois). En attendant, tu peux scanner un produit ou ajouter un aliment à la main.'},
+          {cls:'aibtn',t:'Ajouter ma clé',fn:openKey},
+          {cls:'aisec',t:'Scanner un produit',fn:()=>{ aiClose(); scanOpen('meal'); }},
+          {cls:'aisec',t:'Ajouter un aliment à la main',fn:()=>{ aiClose(); const b=document.getElementById('openpick'); if(b)b.click(); }}]);
+}
+function aiFail(txt,e){
+  if(e&&e.code==='nokey'){ aiNoKey(txt); return; }
+  const items=[{msg:aiErrMsg(e)}];
+  if(e&&e.code==='auth'){ aiPendingTxt=txt; items.push({cls:'aibtn',t:'Vérifier ma clé',fn:openKey}); }
+  else items.push({cls:'aibtn',t:'Réessayer',fn:()=>{ aiReset(); document.getElementById('aitext').value=txt; aiAnalyze(); }});
+  items.push({cls:'aisec',t:'Scanner un produit',fn:()=>{ aiClose(); scanOpen('meal'); }});
+  document.getElementById('aistep1').hidden=true; document.getElementById('aistep2').hidden=false; aiBtns(items);
+}
+function openKey(){ document.getElementById('keyin').value=aiKey(); const m=document.getElementById('keymsg'); m.textContent=''; m.classList.remove('err'); document.getElementById('keydel').hidden=!aiKey(); document.getElementById('keymodal').hidden=false; setTimeout(()=>document.getElementById('keyin').focus(),80); }
+function closeKey(){ document.getElementById('keymodal').hidden=true; }
+async function saveKey(){
+  const v=document.getElementById('keyin').value.trim(), m=document.getElementById('keymsg'), b=document.getElementById('keysave');
+  m.classList.remove('err');
+  if(!v){ m.classList.add('err'); m.textContent='Colle d’abord ta clé.'; return; }
+  if(!/^sk-ant-/.test(v)){ m.classList.add('err'); m.textContent='Une clé Anthropic commence par « sk-ant- ».'; return; }
+  b.disabled=true; m.textContent='Test de la clé…';
+  try{
+    await aiCall('Réponds uniquement par le mot OK.',8,v);
+    try{ sset(KEYK,v); }catch(e){}
+    renderAiStatus(); m.textContent='Clé enregistrée. L’IA est connectée.';
+    setTimeout(()=>{ closeKey(); if(!document.getElementById('aimodal').hidden&&aiPendingTxt){ const t=aiPendingTxt; aiPendingTxt=''; aiReset(); document.getElementById('aitext').value=t; aiAnalyze(); } },900);
+  }catch(e){ m.classList.add('err'); m.textContent=aiErrMsg(e); }
+  b.disabled=false;
+}
+function delKey(){ try{ sset(KEYK,''); }catch(e){} renderAiStatus(); closeKey(); }
+document.getElementById('pfAiB').onclick=openKey;
+document.getElementById('keyclose').onclick=closeKey;
+document.getElementById('keysave').onclick=saveKey;
+document.getElementById('keydel').onclick=delKey;
+document.getElementById('keymodal').addEventListener('click',e=>{ if(e.target.id==='keymodal')closeKey(); });
+document.getElementById('keyin').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); saveKey(); } });
+renderAiStatus();
+
 async function aiAnalyze(){
   const txt=document.getElementById('aitext').value.trim(); if(!txt)return;
+  if(!aiKey()){ aiNoKey(txt); return; }
   document.getElementById('aistep1').hidden=true;
   const s2=document.getElementById('aistep2'); s2.hidden=false;
   s2.innerHTML='<div class="spin"><i></i> Analyse du repas…</div>';
@@ -1305,19 +1515,16 @@ Règles : base_kcal/base_prot = ce qui est certain quelle que soit la réponse (
 
 IMPORTANT — matières grasses : pose TOUJOURS une dernière question sur la sauce et la matière grasse de cuisson, même si l'utilisateur n'en a pas parlé (c'est la source de calories la plus souvent oubliée). Adapte-la au plat : pour un wrap ou un sandwich, propose mayo/sauce blanche/ketchup ; pour un plat poêlé, propose spray/filet d'huile/beurre ; pour une salade, propose vinaigrette légère/classique. La première option doit toujours être "Aucune" à 0 kcal.`;
   try{
-    const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:1000,messages:[{role:"user",content:prompt}]})});
-    const d=await r.json();
-    let t=(d.content||[]).filter(x=>x.type==='text').map(x=>x.text).join('\n').replace(/```json|```/g,'').trim();
+    const res=await aiCall(prompt,1800);
+    if(res.stop==='max_tokens'){ const er=new Error('trunc'); er.code='trunc'; throw er; }
+    let t=res.text.replace(/```json|```/g,'').trim();
     const a=t.indexOf('{'), b=t.lastIndexOf('}'); if(a>=0&&b>a)t=t.slice(a,b+1);
-    aiData=JSON.parse(t);
+    let parsed; try{ parsed=JSON.parse(t); }catch(pe){ const er=new Error('parse'); er.code='parse'; throw er; }
+    aiData=parsed;
     if(!aiData.questions)aiData.questions=[];
     aiData.questions.forEach(q=>{ const n=(q.options||[]).length; aiAnswers[q.id]= n?Math.floor((n-1)/2):0; });
     renderQuestions();
-  }catch(e){
-    s2.innerHTML='<div class="err">Impossible d\'analyser le repas. Vérifie ta connexion, ou ajoute l\'aliment à la main.</div><button class="aibtn" id="airetry">Réessayer</button>';
-    document.getElementById('airetry').onclick=()=>{ aiReset(); document.getElementById('aitext').value=txt; };
-  }
+  }catch(e){ aiFail(txt,e); }
 }
 const EXTRAS=[
  {id:'x1',l:'🥄 Huile / beurre',k:110,p:0},
