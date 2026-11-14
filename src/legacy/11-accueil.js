@@ -347,7 +347,7 @@ document.querySelectorAll('.view.part').forEach(view=>{
   });
 });
 function hubAct(v,act){
-  if(v==='nutrition'){ goToday(); if(act==='photo')aiPhotoPick(); else if(act==='add')openPicker(); }
+  if(v==='nutrition'){ goToday(); if(act==='photo')aiPhotoPick(); else if(act==='add')openPicker(); else if(act==='scan')scanOpen('meal'); }
 }
 document.getElementById('goalB').onclick=()=>{ const tgt=document.getElementById('goalB').getAttribute('data-target'); if(tgt==='program'){ goToday(); showView('training'); } else goSession(tgt); };
 document.getElementById('tdKcal').onclick=()=>{ goToday(); showView('nutrition','repas'); };

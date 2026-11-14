@@ -246,6 +246,7 @@
   .ph-tile.main > i{background:rgba(255,255,255,.18); color:#fff}
   .ph-tile.main small{color:rgba(255,255,255,.84)}
   .ph-tile .sub-dot{position:absolute; top:10px; right:10px}
+  .ph-tiles > .ph-tile:not(.main):last-child:nth-child(even){grid-column:1 / -1}
   .ph.enter .ph-fig{animation:heroIn .5s var(--ease) both}
   .ph.enter .ph-top,.ph.enter .ph-say,.ph.enter .ph-tiles{animation:upIn .45s var(--ease) both}
   .ph.enter .ph-say{animation-delay:.06s} .ph.enter .ph-tiles{animation-delay:.1s}

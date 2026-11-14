@@ -125,7 +125,7 @@ test('Nutrition : l’entrée (Ren, sa phrase, les tuiles), une rubrique à la f
   await expect(page.locator('#v-nutrition > .ps')).toBeHidden();
   await expect(page.locator('#nhSub')).toHaveText(/^890 kcal sur 2\s600, protéines 74 \/ 155 g$/);
   await expect(page.locator('#nhSay')).toHaveText(/^Il te reste 1\s710 kcal, dont 81 g de protéines à trouver\.$/);
-  await expect(hub.locator('.ph-tile b')).toHaveText(['Photo du plat', 'Ajouter un aliment', 'Mes repas', 'Protéines et habitudes', 'Objectif']);
+  await expect(hub.locator('.ph-tile b')).toHaveText(['Photo du plat', 'Scanner', 'Ajouter un aliment', 'Mes repas', 'Protéines et habitudes', 'Objectif']);
   await expect(page.locator('#nhMeals')).toHaveText('3 aujourd’hui');
   await expect(page.locator('#nhProt')).toHaveText('74 / 155 g');
   await expect(page.locator('#nhGoal')).toHaveText(/^2\s600 kcal$/);
