@@ -1,0 +1,46 @@
+{
+  "note": "Cases ratées d’une planche, refaites seules (une image carrée, un exercice) dans la même conversation, plutôt que de refaire toute la planche. Une case « refaite » remplace la case de la planche : à la découpe, on prend son fichier, réduit à la taille de la case.",
+  "cases": [
+    {
+      "salve": 1,
+      "n": 6,
+      "id": "dc-pause",
+      "defaut": "La barre touche le haut de la poitrine, près des clavicules ; elle doit reposer sur le bas des pectoraux, au niveau du sternum.",
+      "etat": "à refaire",
+      "suite": "1er et 2e essais : même composition, la barre reste sous le menton (ChatGPT recopie ses propres images dans la conversation de la salve 1). 3e essai : à la fin de la salve 2, dans sa conversation. Barre posée sur les pectoraux, qui traverse la lueur violette (du violet visible au-dessus et en dessous de la barre), caméra plus en plongée."
+    },
+    {
+      "salve": 1,
+      "n": 10,
+      "id": "dc-squeeze",
+      "defaut": "Un seul haltère tenu à deux mains ; il faut deux haltères en prise neutre, collés l’un contre l’autre et pressés ensemble au-dessus du milieu de la poitrine.",
+      "etat": "refaite",
+      "fichier": "salve01-case10.png"
+    },
+    {
+      "salve": 1,
+      "n": 20,
+      "id": "ed-halteres",
+      "defaut": "La lueur violette est sur le haut des abdos ; elle doit être sur le bas des pectoraux, juste au-dessus de la cage thoracique.",
+      "etat": "refaite",
+      "fichier": "salve01-case20.png"
+    },
+    {
+      "salve": 1,
+      "n": 21,
+      "id": "pec-deck",
+      "defaut": "Bras ouverts sur les côtés, on dirait un développé machine ; il faut les bras qui se referment devant la poitrine, poignées presque jointes.",
+      "etat": "refaite",
+      "fichier": "salve01-case21.png"
+    },
+    {
+      "salve": 1,
+      "n": 27,
+      "id": "dev-poulie",
+      "defaut": "On dirait un écarté : un bras traverse devant la poitrine, l’autre est ouvert vers la poulie. Il faut pousser les deux poignées droit devant, dos aux poulies, câbles qui partent de derrière.",
+      "etat": "refaite",
+      "suite": "2e essai réussi en vue de côté : Ren de profil, poulie derrière lui, bras tendus droit devant.",
+      "fichier": "salve01-case27.png"
+    }
+  ]
+}

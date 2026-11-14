@@ -1,0 +1,11 @@
+# Réglages Supabase utilisés par la commande `supabase` (déploiement des fonctions).
+# project_id : identifiant du projet (Settings → General → Reference ID).
+project_id = "a-remplacer"
+
+[functions.ai]
+# Le jeton de l'utilisateur est vérifié dans la fonction (compatible avec les nouvelles
+# clés de signature de Supabase).
+verify_jwt = false
+
+[functions.account]
+verify_jwt = false

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Confidentialité — Mon suivi</title>
+<meta name="theme-color" content="#0B0A0F">
+<meta name="robots" content="noindex">
+<style>
+  :root{--bg:#0B0A0F;--txt:#F5F5F7;--muted:rgba(245,245,247,.68);--line:#2B2B38;--hot:#C5A3FF}
+  html,body{margin:0;background:var(--bg);color:var(--txt)}
+  body{font:500 15px/1.6 system-ui,-apple-system,'Segoe UI',sans-serif;padding:calc(20px + env(safe-area-inset-top)) 18px calc(32px + env(safe-area-inset-bottom))}
+  main{max-width:680px;margin:0 auto}
+  h1{font-size:26px;line-height:1.2;margin:8px 0 6px}
+  h2{font-size:17px;margin:26px 0 6px;padding-top:16px;border-top:1px solid var(--line)}
+  p,li{color:var(--muted)}
+  strong{color:var(--txt)}
+  a{color:var(--hot)}
+  .draft{border:1px solid var(--hot);padding:10px 12px;color:var(--txt);font-size:13.5px}
+  ul{padding-left:20px}
+</style>
+</head>
+<body>
+<main>
+  <p><a href="./">← Revenir à l’app</a></p>
+  <h1>Tes données et ta vie privée</h1>
+  <p class="draft">Projet de notice à compléter avant toute ouverture au public : responsable du traitement, contact, et points marqués « à vérifier ».</p>
+
+  <h2>Sans compte</h2>
+  <p>Tout reste sur ton téléphone : séances, repas, poids, mensurations, photos. Rien n’est envoyé, sauf deux cas que tu déclenches toi-même : le <strong>scanner de codes-barres</strong> (le code du produit est envoyé à Open Food Facts) et l’<strong>analyse IA d’un repas avec ta propre clé</strong> (ta description est envoyée directement à Anthropic).</p>
+
+  <h2>Avec un compte</h2>
+  <p>Ton compte sert à sauvegarder tes données et à les retrouver sur tes autres appareils, et à utiliser l’analyse IA des repas sans clé personnelle.</p>
+  <ul>
+    <li><strong>Données concernées</strong> : ton adresse e-mail, tes données de suivi (entraînements, repas, calories, poids, mensurations, profil et objectifs), et tes photos de progression si tu actives leur sauvegarde. Le poids, les mensurations et les photos sont des données de santé.</li>
+    <li><strong>Base légale</strong> : ton consentement explicite, donné en cochant la case à la création du compte (et séparément pour les photos). Tu peux le retirer à tout moment en supprimant ton compte.</li>
+    <li><strong>Hébergement</strong> : Supabase, région de l’Union européenne (à vérifier : région choisie à la création du projet). Les données sont chiffrées pendant le transfert (HTTPS) et sur les disques du fournisseur.</li>
+    <li><strong>Analyse IA</strong> : la description du repas que tu écris est transmise à Anthropic (États-Unis) pour estimer les calories. Elle n’est pas conservée par l’app. À vérifier : accord de traitement des données et clauses contractuelles types avec Anthropic.</li>
+    <li><strong>Qui y a accès</strong> : toi seul, depuis l’app. Chaque compte est cloisonné dans la base de données.</li>
+    <li><strong>Durée</strong> : tant que le compte existe. La suppression du compte efface tout ce qui est en ligne ; les données sur ton téléphone restent, et tu peux les effacer en supprimant l’app.</li>
+  </ul>
+
+  <h2>Tes droits</h2>
+  <p>Accès et portabilité : bouton « Exporter mes données » dans le Profil (fichier complet, photos comprises). Effacement : « Supprimer mon compte et mes données en ligne », dans Profil → Compte → Gérer. Pour toute autre demande : <strong>[adresse de contact à indiquer]</strong>. Tu peux aussi saisir la CNIL (cnil.fr).</p>
+
+  <h2>Mises à jour</h2>
+  <p>Version du 26 octobre 2026. Si cette notice change de façon importante, l’app te redemandera ton accord.</p>
+</main>
+</body>
+</html>
