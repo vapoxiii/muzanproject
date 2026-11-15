@@ -288,6 +288,37 @@
   .th-tl{display:flex; align-items:flex-start; justify-content:space-between; gap:12px}
   .th-prog{flex:none; display:inline-flex; align-items:center; gap:6px; height:36px; margin-top:4px; padding:0 13px; border:0; border-radius:999px; background:rgba(30,29,39,.86); box-shadow:inset 0 0 0 1px var(--line2); color:var(--txt); font-size:13px; font-weight:650; cursor:pointer; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); transition:transform .14s var(--ease)}
   .th-prog:active{transform:scale(.96)}
+  .th-acts{flex:none; display:flex; gap:6px}
+  @media (max-width:389px){ #chronoOpen span{display:none} #chronoOpen{width:36px; padding:0; justify-content:center} }
+  /* durée de la séance, dans l'en-tête de la séance ouverte */
+  .ses-clock{flex:none; margin:4px 0 0 auto; display:inline-flex; align-items:center; gap:6px; height:36px; padding:0 13px; border:0; border-radius:999px; background:var(--surf2); color:var(--txt); font-size:13.5px; font-weight:650; cursor:pointer; transition:transform .14s var(--ease)}
+  .ses-clock:active{transform:scale(.96)}
+  .ses-clock svg{color:var(--hot2)}
+  .ses-clock b{font-weight:700; font-variant-numeric:tabular-nums}
+  .ses-clock.run{background:rgba(146,92,255,.18); box-shadow:inset 0 0 0 1px rgba(146,92,255,.45)}
+  .ses-clock.pause b{color:var(--muted)}
+  .ses-clock.fin{background:var(--surf2); color:var(--muted)}
+  /* fenêtre Chrono / Minuteur */
+  .chr-tabs{display:grid; grid-template-columns:1fr 1fr; gap:4px; padding:4px; border-radius:999px; background:var(--surf2); margin-bottom:18px}
+  .chr-tabs button{min-height:38px; border:0; border-radius:999px; background:none; color:var(--muted); font-size:14px; font-weight:650; cursor:pointer}
+  .chr-tabs button[aria-selected="true"]{background:var(--hot1); color:#fff}
+  .chr-big{margin:6px 0 4px; text-align:center; font-size:64px; font-weight:800; letter-spacing:-.02em; line-height:1; font-variant-numeric:tabular-nums}
+  .chr-big small{font-size:30px; color:var(--muted); font-weight:700}
+  .chr-sub{min-height:18px; margin:0 0 18px; text-align:center; font-size:13px; color:var(--muted)}
+  .chr-row{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+  .chr-b{min-height:52px; border:0; border-radius:var(--radius); background:var(--surf2); color:var(--txt); font-size:15.5px; font-weight:700; cursor:pointer; transition:transform .14s var(--ease)}
+  .chr-b:active{transform:scale(.97)}
+  .chr-b.go{background:var(--hot1); color:#fff; box-shadow:var(--sh-cta)}
+  .chr-b:disabled{opacity:.4}
+  .chr-laps{margin:14px 0 0; padding:0; list-style:none; max-height:30vh; overflow:auto}
+  .chr-laps li{display:flex; justify-content:space-between; padding:9px 2px; border-top:1px solid var(--line2, rgba(243,241,248,.08)); font-size:14px; font-variant-numeric:tabular-nums}
+  .chr-laps li span{color:var(--muted)}
+  .chr-pre{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-bottom:12px}
+  .chr-pre button{min-height:44px; border:0; border-radius:var(--r-sm); background:var(--surf2); color:var(--txt); font-size:15px; font-weight:650; font-variant-numeric:tabular-nums; cursor:pointer}
+  .chr-pre button.on{background:rgba(146,92,255,.2); box-shadow:inset 0 0 0 1.5px var(--hot1)}
+  .chr-adj{display:flex; align-items:center; justify-content:center; gap:14px; margin:4px 0 16px}
+  .chr-adj button{width:64px; min-height:40px; border:0; border-radius:999px; background:var(--surf2); color:var(--txt); font-size:14px; font-weight:650; cursor:pointer}
+  .chr-adj .chr-big{margin:0; font-size:48px}
   .th-prog svg{color:var(--hot2)}
   .th-date{margin:7px 0 0; font-size:14.5px; font-weight:650; line-height:1.3; text-shadow:0 2px 12px rgba(0,0,0,.7)}
   .th-wk{display:flex; align-items:center; gap:8px; margin:5px 0 0; font-size:12.5px; font-weight:600; line-height:1.3; color:var(--muted); font-variant-numeric:tabular-nums; text-shadow:0 2px 12px rgba(0,0,0,.7)}

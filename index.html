@@ -72,7 +72,8 @@
         <header class="ph-top th-top">
           <div class="th-tl">
             <h1 class="ph-t" tabindex="-1">Training</h1>
-            <button type="button" class="th-prog" id="progOpen" aria-label="Modifier mon programme"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg><span>Programme</span></button>
+            <div class="th-acts"><button type="button" class="th-prog" id="chronoOpen" aria-label="Chrono et minuteur"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 13.5V10M10 3h4M18.5 6.5l1.5-1.5"/></svg><span>Chrono</span></button>
+            <button type="button" class="th-prog" id="progOpen" aria-label="Modifier mon programme"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg><span>Programme</span></button></div>
           </div>
           <p class="th-date" id="thDate"></p>
           <p class="th-wk"><span class="th-pips" id="thPips" aria-hidden="true"></span><span id="trmeta"></span></p>
@@ -92,7 +93,7 @@
     </div>
 
     <div class="ps" hidden>
-    <header class="vh vh-sub"><button type="button" class="vh-back" data-back aria-label="Retour à Training"><svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M8 2 2 8l6 6" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="vh-tx"><h1 class="vh-t" tabindex="-1" id="trSesT">Séance</h1><p class="vh-s" id="trSesS"></p></div></header>
+    <header class="vh vh-sub"><button type="button" class="vh-back" data-back aria-label="Retour à Training"><svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M8 2 2 8l6 6" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="vh-tx"><h1 class="vh-t" tabindex="-1" id="trSesT">Séance</h1><p class="vh-s" id="trSesS"></p></div><button type="button" class="ses-clock" id="sesClock" aria-live="off"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 13.5V10M10 3h4"/></svg><b class="num" id="sesClockV">Démarrer</b></button></header>
     <div id="sessions"></div>
     </div>
   </section>
