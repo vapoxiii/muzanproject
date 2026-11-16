@@ -52,7 +52,7 @@
 .lg-cfg{flex:0 0 auto; display:grid; place-items:center; width:38px; height:36px; border:0; border-radius:10px; background:var(--surf2); color:var(--muted); cursor:pointer}
 
 /* ---- Minuteur de repos ---- */
-.trest{position:fixed; left:0; right:0; bottom:calc(70px + env(safe-area-inset-bottom)); z-index:45; max-width:520px; margin:0 auto; padding:0 10px; opacity:0; transform:translateY(14px); transition:opacity .2s ease, transform .2s ease; pointer-events:none}
+.trest{position:fixed; left:0; right:0; bottom:calc(70px + var(--sab)); z-index:45; max-width:520px; margin:0 auto; padding:0 10px; opacity:0; transform:translateY(14px); transition:opacity .2s ease, transform .2s ease; pointer-events:none}
 .trest.on{opacity:1; transform:none; pointer-events:auto}
 .trest-in{position:relative; display:flex; align-items:center; gap:10px; padding:10px 10px 12px 16px; overflow:hidden; border:1px solid rgba(197,163,255,.22); border-radius:20px; background:#1B1729; box-shadow:0 12px 32px rgba(70,46,150,0.16)}
 .trest-t{flex:1; min-width:0; display:flex; align-items:baseline; gap:10px}
@@ -65,7 +65,7 @@
 .trest.fin .trest-in{border-color:var(--hot2); animation:restFin .5s ease 2}
 .trest.fin .trest-k{font-size:15px; font-weight:700; color:var(--txt)}
 @keyframes restFin{0%,100%{background:#1A1630} 50%{background:#3a2a6e}}
-html.trest-on .xpt, html.trest-on .tr-toast{bottom:calc(146px + env(safe-area-inset-bottom))}
+html.trest-on .xpt, html.trest-on .tr-toast{bottom:calc(146px + var(--sab))}
 
 /* ---- Fenêtres (plein écran et feuilles du bas) ---- */
 html.tr-lock, html.tr-lock body{overflow:hidden}
@@ -89,7 +89,7 @@ html.tr-lock, html.tr-lock body{overflow:hidden}
 .tr-ask .ask-t{margin:4px 0 0; font-size:18px; font-weight:700; line-height:1.3; letter-spacing:-.01em}
 .tr-ask .ask-p{margin:8px 0 0; font-size:14px; font-weight:500; line-height:1.5; color:var(--muted)}
 .tr-ask .ask-b{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:20px}
-.tr-toast{position:fixed; left:50%; bottom:calc(82px + env(safe-area-inset-bottom)); z-index:95; max-width:calc(100% - 32px); padding:10px 16px; border:1px solid rgba(197,163,255,.25); border-radius:999px; background:var(--card); color:var(--txt); font-size:13.5px; font-weight:600; text-align:center; opacity:0; transform:translate(-50%,8px); transition:opacity .2s ease, transform .2s ease; pointer-events:none; box-shadow:0 10px 26px rgba(70,46,150,0.128)}
+.tr-toast{position:fixed; left:50%; bottom:calc(82px + var(--sab)); z-index:95; max-width:calc(100% - 32px); padding:10px 16px; border:1px solid rgba(197,163,255,.25); border-radius:999px; background:var(--card); color:var(--txt); font-size:13.5px; font-weight:600; text-align:center; opacity:0; transform:translate(-50%,8px); transition:opacity .2s ease, transform .2s ease; pointer-events:none; box-shadow:0 10px 26px rgba(70,46,150,0.128)}
 .tr-toast.on{opacity:1; transform:translate(-50%,0)}
 
 /* ---- Constructeur de programme ---- */
@@ -98,7 +98,7 @@ html.tr-lock, html.tr-lock body{overflow:hidden}
 .pe-tt{font-size:13px; font-weight:600; color:var(--muted)}
 .pe-ico,.pe-back{display:inline-flex; align-items:center; gap:7px; min-width:64px; min-height:40px; padding:0 6px; border:0; background:none; color:var(--txt); font-size:14px; font-weight:600; cursor:pointer}
 .pe-ok{min-width:72px; min-height:38px; padding:0 16px; border:0; border-radius:999px; background:var(--hot1); color:#fff; font-size:14px; font-weight:650; cursor:pointer}
-.pe-body{flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; padding:18px 16px calc(48px + env(safe-area-inset-bottom))}
+.pe-body{flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; padding:18px 16px calc(48px + var(--sab))}
 .pe-t{margin:0; font-family:var(--display); font-weight:800; font-size:29.6px; line-height:1.09; letter-spacing:-.02em}
 .pe-s{margin:7px 0 16px; font-size:14px; font-weight:500; color:var(--muted)}
 .pe-ses{padding:16px 0; border-bottom:1px solid var(--line)}
@@ -206,8 +206,8 @@ html.tr-lock, html.tr-lock body{overflow:hidden}
 .pk-cat svg{position:absolute; right:13px; top:50%; margin-top:-6px; color:var(--muted)}
 .pk-n{margin:14px 0 2px; font-size:13px; font-weight:600; color:var(--muted)}
 .pk-res{flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; margin:0 -16px; padding:0 16px}
-.pk-new{flex:0 0 auto; padding:4px 0 calc(14px + env(safe-area-inset-bottom))}
-.pk-new:empty{padding:0 0 calc(8px + env(safe-area-inset-bottom))}
+.pk-new{flex:0 0 auto; padding:4px 0 calc(14px + var(--sab))}
+.pk-new:empty{padding:0 0 calc(8px + var(--sab))}
 .pk-g{position:sticky; top:0; z-index:1; display:flex; align-items:baseline; gap:8px; margin:0; padding:16px 0 6px; background:var(--elev); font-size:15px; font-weight:700; line-height:1.2; color:var(--hot2)}
 .pk-g span{font-size:12.5px; font-weight:500; color:var(--muted)}
 .pk-it{display:flex; align-items:center; gap:12px; width:100%; min-height:58px; padding:8px 0; border:0; border-bottom:1px solid var(--line); background:none; color:var(--txt); text-align:left; cursor:pointer}
@@ -257,7 +257,7 @@ html.tr-lock, html.tr-lock body{overflow:hidden}
 .cb-rest{margin:0 2px 14px; font-size:12.5px; font-weight:600; color:rgba(38,24,82,0.55)}
 
 /* les séances proposées */
-.cb-rv .pe-body{padding-bottom:calc(40px + env(safe-area-inset-bottom))}
+.cb-rv .pe-body{padding-bottom:calc(40px + var(--sab))}
 .cb-say{display:flex; align-items:flex-start; gap:12px; margin:0 0 20px; padding:14px; border-radius:18px; background:radial-gradient(120% 120% at 0% 0%, rgba(146,92,255,.18), rgba(146,92,255,.06) 70%)}
 .cb-say img{flex:0 0 auto; width:40px; height:40px; border-radius:50%; object-fit:cover; object-position:center 8%; background:#FFFFFF; box-shadow:0 0 0 1.5px rgba(197,163,255,.45)}
 .cb-say p{margin:0; font-size:14px; font-weight:500; line-height:1.45; color:rgba(38,24,82,0.86)}
@@ -399,7 +399,7 @@ html.tr-lock, html.tr-lock body{overflow:hidden}
 .rr-c:active{transform:scale(.93)}
 
 /* NextExerciseCard : la suite de la séance en cours ; un toucher y ramène, ses séries ouvertes */
-.rr-next{position:relative; z-index:3; display:flex; align-items:center; gap:14px; margin:0 max(16px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom) + 16px) max(16px, env(safe-area-inset-left, 0px)); padding:11px 16px 11px 11px; overflow:hidden; border:0; border-radius:22px; text-align:left; color:var(--txt); cursor:pointer;
+.rr-next{position:relative; z-index:3; display:flex; align-items:center; gap:14px; margin:0 max(16px, env(safe-area-inset-right, 0px)) calc(var(--sab) + 16px) max(16px, env(safe-area-inset-left, 0px)); padding:11px 16px 11px 11px; overflow:hidden; border:0; border-radius:22px; text-align:left; color:var(--txt); cursor:pointer;
   background:#fff; box-shadow:0 12px 30px rgba(70,46,150,.12), inset 0 0 0 1px rgba(123,77,230,.06)}
 .rr-next-im{position:relative; flex:0 0 auto; width:84px; height:64px; display:grid; place-items:center; overflow:hidden; border-radius:14px; background:var(--surf2); color:var(--hot1)}
 .rr-next-im img{width:100%; height:100%; object-fit:cover}

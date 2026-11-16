@@ -32,7 +32,7 @@ test('la cuisine : image du jour, balance qui affiche les calories, ses quatre f
   await expect(page.locator('#kzScale')).toBeInViewport();
   await expect(page.locator('#kzJars')).toBeInViewport();
   // les tuiles sont toujours là, le scanner compris
-  await expect(hub.locator('.ph-tile b')).toHaveText(['Photo du plat', 'Scanner', 'Ajouter un aliment', 'Mes repas', 'Protéines et habitudes', 'Objectif']);
+  await expect(hub.locator('.ph-tile b')).toHaveText(['Photo du plat', 'Scanner', 'Ajouter un aliment', 'Mes repas']);
   await expect(hub.locator('.ph-tile[data-act="scan"]')).toBeInViewport();
 
   // la balance : ce qu'on a mangé

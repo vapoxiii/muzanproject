@@ -8,14 +8,18 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Suivi">
-<meta name="theme-color" content="#F6F4FB">
+<meta name="theme-color" content="#FCFBFE">
 <meta name="ms-version" content="__MS_VERSION__">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="description" content="Suivi entraînement, nutrition, mesures et photos.">
 <style>html.boot body>*{visibility:hidden}html.boot body{background:#F6F4FB}</style>
-<script>setTimeout(function(){document.documentElement.classList.remove("boot")},6000)</script>
+<script>
+// iOS 26, web app sur l'écran d'accueil : la page s'arrête au-dessus d'une bande gardée par le système
+// (barre d'accueil comprise). Dans ce cas, pas de seconde marge en bas (html.pwa-short, voir app.css).
+(function(){var r=document.documentElement;function f(){var sa=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;var h=Math.max(screen.height,screen.width),w=Math.min(screen.height,screen.width),port=window.innerHeight>window.innerWidth;r.classList.toggle('pwa-short',!!(sa&&port&&h-window.innerHeight>30&&h/w>1.9));}f();addEventListener('orientationchange',function(){setTimeout(f,400)});})();
+setTimeout(function(){document.documentElement.classList.remove("boot")},6000)</script>
 </head>
 <body>
 <div id="app">
@@ -117,14 +121,16 @@
       <div class="kz-scrim" aria-hidden="true"></div>
       <div class="ph-ui">
         <header class="ph-top"><h1 class="ph-t" tabindex="-1">Nutrition</h1><p class="ph-s" id="nhSub"></p></header>
+        <div class="nh-g" role="group" aria-label="Ta journée">
+          <button type="button" class="nh-gb" data-sub="objectif" id="nhKcalB"><span class="nh-gk">Calories<em class="sub-dot" id="calDot" hidden aria-hidden="true"></em></span><span class="nh-gv"><b class="num" id="nhKcal">0</b><span class="nh-sep"> / </span><span class="num" id="nhGoal"></span></span><span class="bar"><i id="nhKcalBar"></i></span></button>
+          <button type="button" class="nh-gb" data-sub="proteines" id="nhProtB"><span class="nh-gk">Protéines</span><span class="nh-gv num" id="nhProt"></span><span class="bar"><i id="nhProtBar"></i></span></button>
+        </div>
         <div class="ph-say"><p class="ph-say-w" id="nhWho">Ren</p><p class="ph-say-t" id="nhSay" aria-live="polite"></p></div>
         <div class="ph-tiles" role="group" aria-label="Rubriques de la nutrition">
           <button type="button" class="ph-tile main" data-act="photo"><i><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5A2.5 2.5 0 0 1 6 6h1.7l1.3-1.9a1.5 1.5 0 0 1 1.2-.6h3.6a1.5 1.5 0 0 1 1.2.6L16.3 6H18a2.5 2.5 0 0 1 2.5 2.5v8A2.5 2.5 0 0 1 18 19H6a2.5 2.5 0 0 1-2.5-2.5z"/><circle cx="12" cy="12.5" r="3.6"/></svg></i><span><b>Photo du plat</b><small>Je liste ton assiette</small></span></button>
           <button type="button" class="ph-tile" data-act="scan"><i><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8V5.5A1.5 1.5 0 0 1 4.5 4H7M17 4h2.5A1.5 1.5 0 0 1 21 5.5V8M21 16v2.5a1.5 1.5 0 0 1-1.5 1.5H17M7 20H4.5A1.5 1.5 0 0 1 3 18.5V16"/><path d="M7 9v6M10.5 9v6M13.5 9v6M17 9v6"/></svg></i><span><b>Scanner</b><small>Code-barres</small></span></button>
           <button type="button" class="ph-tile" data-act="add"><i><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></i><span><b>Ajouter un aliment</b><small>Tes favoris</small></span></button>
           <button type="button" class="ph-tile" data-sub="repas"><i><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6.5h11M9 12h11M9 17.5h11"/><circle cx="4.5" cy="6.5" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="17.5" r="1"/></svg></i><span><b>Mes repas</b><small id="nhMeals"></small></span></button>
-          <button type="button" class="ph-tile" data-sub="proteines"><i><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 12.5a4.5 4.5 0 1 1 9 0c0 3-2 6.5-4.5 6.5s-4.5-3.5-4.5-6.5z"/><path d="M12 8V4.5M10 5.5h4"/></svg></i><span><b>Protéines et habitudes</b><small id="nhProt"></small></span></button>
-          <button type="button" class="ph-tile" data-sub="objectif"><i><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></i><span><b>Objectif</b><small id="nhGoal"></small></span><em class="sub-dot" id="calDot" hidden aria-hidden="true"></em></button>
         </div>
       </div>
     </div>

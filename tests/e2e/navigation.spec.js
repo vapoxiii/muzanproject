@@ -125,14 +125,16 @@ test('Nutrition : l’entrée (Ren, sa phrase, les tuiles), une rubrique à la f
   await expect(page.locator('#v-nutrition > .ps')).toBeHidden();
   await expect(page.locator('#nhSub')).toHaveText(/^890 kcal sur 2\s600, protéines 74 \/ 155 g$/);
   await expect(page.locator('#nhSay')).toHaveText(/^Il te reste 1\s710\skcal, dont 81\sg de protéines à trouver\.$/);
-  await expect(hub.locator('.ph-tile b')).toHaveText(['Photo du plat', 'Scanner', 'Ajouter un aliment', 'Mes repas', 'Protéines et habitudes', 'Objectif']);
+  await expect(hub.locator('.ph-tile b')).toHaveText(['Photo du plat', 'Scanner', 'Ajouter un aliment', 'Mes repas']);
   await expect(page.locator('#nhMeals')).toHaveText('3 aujourd’hui');
   await expect(page.locator('#nhProt')).toHaveText('74 / 155 g');
   await expect(page.locator('#nhGoal')).toHaveText(/^2\s600 kcal$/);
+  await expect(page.locator('#nhKcal')).toHaveText('890');
+  await expect(hub.locator('.nh-gb')).toHaveCount(2);
   expect(await page.evaluate(() => document.documentElement.scrollHeight <= window.innerHeight + 1)).toBe(true);
 
   // une tuile : sa rubrique seule, son nom en titre ; le retour ramène à l'entrée
-  await hub.locator('.ph-tile[data-sub="proteines"]').tap();
+  await hub.locator('.nh-gb[data-sub="proteines"]').tap();
   await expect(page.locator('#np-proteines')).toBeVisible();
   await expect(hub).toBeHidden();
   await expect(page.locator('#nutT')).toHaveText('Protéines et habitudes');
@@ -142,7 +144,7 @@ test('Nutrition : l’entrée (Ren, sa phrase, les tuiles), une rubrique à la f
   await expect(page.locator('#v-nutrition > .ps')).toBeHidden();
 
   // revenir dans la partie par la roue : l'entrée, pas la dernière rubrique
-  await hub.locator('.ph-tile[data-sub="objectif"]').tap();
+  await hub.locator('.nh-gb[data-sub="objectif"]').tap();
   await expect(page.locator('#np-objectif')).toBeVisible();
   await expect(page.locator('#nutT')).toHaveText('Objectif');
   await showView(page, 'home');

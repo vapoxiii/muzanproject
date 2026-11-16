@@ -63,7 +63,7 @@ export async function showView(page, v) {
 export async function showSub(page, v, sub) {
   const tab = page.locator(`.sub[data-sub="${v}"] [data-p="${sub}"]`);
   if (await tab.count()) await tab.click();
-  else await page.evaluate(({ v, sub }) => document.querySelector(`#v-${v} .ph-tile[data-sub="${sub}"]`).click(), { v, sub });
+  else await page.evaluate(({ v, sub }) => document.querySelector(`#v-${v} .ph-tile[data-sub="${sub}"], #v-${v} .nh-gb[data-sub="${sub}"]`).click(), { v, sub });
   await page.waitForTimeout(250);
 }
 

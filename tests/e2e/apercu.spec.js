@@ -65,7 +65,7 @@ test('l’aperçu s’ouvre avec l’exemple, sans erreur, polices et images com
   await tab(page, 'nutrition');
   // l'exemple est daté par rapport à aujourd'hui : proposition, ou « dans le rythme »
   await expect(page.locator('#calAdj')).toContainText(/Ajustement/);
-  await page.locator('#v-nutrition .ph-tile[data-sub="objectif"]').click();
+  await page.locator('#v-nutrition .nh-gb[data-sub="objectif"]').click();
   await expect(page.locator('#calAdj')).toBeVisible();
   expect(errors).toEqual([]);
   expect(failed).toEqual([]);

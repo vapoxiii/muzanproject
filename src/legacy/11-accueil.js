@@ -151,8 +151,18 @@ function renderNutritionHub(){
   // (textes courts : une tuile fait une demi-largeur de téléphone)
   document.getElementById('nhMeals').textContent=n?n+' aujourd’hui':'Aucun encore';
   document.getElementById('nhProt').textContent=nf(tt.p)+' / '+nf(PROT_GOAL)+' g';
-  const dot=document.getElementById('calDot');
-  document.getElementById('nhGoal').textContent=dot&&!dot.hidden?'Nouvelle base':nf(tg.t)+' kcal';
+  const dot=document.getElementById('calDot'), nb=!!dot&&!dot.hidden;
+  document.getElementById('nhGoal').textContent=nb?'Nouvelle base':nf(tg.t)+' kcal';
+  // les deux jauges de l'entrée : calories (vers l'objectif) et protéines (vers protéines et habitudes)
+  const kB=document.getElementById('nhKcalB');
+  if(kB){
+    document.getElementById('nhKcal').textContent=nf(tt.k);
+    kB.classList.toggle('new',nb); kB.classList.toggle('over',left<0);
+    document.getElementById('nhKcalBar').style.width=Math.max(0,Math.min(100,tg.t?tt.k/tg.t*100:0))+'%';
+    document.getElementById('nhProtBar').style.width=Math.max(0,Math.min(100,PROT_GOAL?tt.p/PROT_GOAL*100:0))+'%';
+    kB.setAttribute('aria-label','Calories : '+nf(tt.k)+' sur '+nf(tg.t)+(nb?', nouvelle base proposée':'')+'. Voir l’objectif');
+    document.getElementById('nhProtB').setAttribute('aria-label','Protéines : '+nf(tt.p)+' grammes sur '+nf(PROT_GOAL)+'. Voir les protéines et les habitudes');
+  }
 }
 // Le personnage de l'accueil : Ren illustré, ou l'avatar si on l'a choisi dans Profil, Accueil
 function heroIsAvatar(){ return document.getElementById('hd').classList.contains('av-on'); }
@@ -349,7 +359,7 @@ function goSession(target){
 document.querySelectorAll('.view.part').forEach(view=>{
   const v=view.dataset.view;
   view.addEventListener('click',e=>{
-    const t=e.target.closest('.ph-tile');
+    const t=e.target.closest('.ph-tile, .nh-gb');
     if(t){ if(t.dataset.sub)openSub(v,t.dataset.sub,true); else if(t.dataset.act)hubAct(v,t.dataset.act); return; }
     if(e.target.closest('[data-back]')){ setHub(v,true); window.scrollTo(0,0); focusTitle(v); }
   });
