@@ -38,11 +38,21 @@ test('constructeur : ajouter un exercice de la bibliothèque, le régler au curs
   await page.click('[data-open="hautA"]');
   await page.click('[data-act="pick"]');
   const pk = page.locator('.pk');
-  await expect(pk.locator('.pk-n')).toHaveText(/^3\d\d exercices$/);
-  await pk.locator('[data-m="fessiers"]').click();
-  // un muscle : rangé par cible
-  await expect(pk.locator('.pk-g')).toContainText(['Grand fessier', 'Moyen fessier']);
-  await expect(pk.locator('.pk-it').first()).toContainText('Hip thrust');
+  // le muscle, puis le matériel, puis la liste
+  await expect(pk.locator('.pk-n')).toHaveText('Choisis un muscle');
+  await expect(pk.locator('.pk-cat b')).toContainText(['Pectoraux', 'Dos', 'Épaules', 'Biceps', 'Triceps']);
+  await pk.locator('[data-cat="pecs"]').click();
+  await expect(pk.locator('.pk-n')).toHaveText('Choisis le matériel');
+  await pk.locator('[data-eqg="pdc"]').click();
+  await expect(pk.locator('.pk-it').first()).toContainText('Pompes');
+  await expect(pk.locator('.pk-it[data-x="pompes"]')).toBeVisible();
+  await pk.locator('[data-act="up"]').click();
+  await pk.locator('[data-act="up"]').click();
+  await pk.locator('[data-cat="jambes"]').click();
+  await pk.locator('[data-eqg="barre"]').click();
+  // plusieurs muscles : rangés par muscle
+  await expect(pk.locator('.pk-g')).toContainText(['Quadriceps', 'Ischios', 'Fessiers']);
+  await expect(pk.locator('.pk-it[data-x="hip-thrust"]')).toBeVisible();
   await page.fill('#pkQ', 'hip thr');
   await expect(pk.locator('.pk-it').first()).toContainText('Hip thrust');
   await pk.locator('.pk-it[data-x="hip-thrust"]').click();

@@ -193,6 +193,17 @@ html.tr-lock, html.tr-lock body{overflow:hidden}
 .pk-chips.sm button{min-height:30px; padding:0 11px; font-size:12px; color:var(--muted)}
 .pk-chips.sm button[aria-pressed="true"]{background:var(--tint); color:var(--txt); box-shadow:inset 0 0 0 1.5px rgba(146,92,255,.7)}
 .pk-chips.wrap{flex-wrap:wrap; margin:8px 0 0; padding:0; overflow:visible}
+.pk-nav{display:flex; align-items:center; gap:10px; margin-top:12px}
+.pk-nav:empty{display:none}
+.pk-up{display:inline-flex; align-items:center; gap:7px; min-height:36px; padding:0 14px 0 12px; border:0; border-radius:999px; background:var(--surf2); color:var(--txt); font-size:13.5px; font-weight:650; cursor:pointer}
+.pk-up svg{color:var(--hot2)}
+.pk-here{font-size:16px; font-weight:700}
+.pk-cats{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; padding:6px 0 16px}
+.pk-cat{position:relative; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:3px; min-height:68px; padding:10px 30px 10px 14px; border:0; border-radius:16px; background:var(--surf2); color:var(--txt); text-align:left; cursor:pointer; transition:transform .14s ease}
+.pk-cat:active{transform:scale(.97)}
+.pk-cat b{font-size:15px; font-weight:700; line-height:1.2}
+.pk-cat span{font-size:12.5px; font-weight:500; color:var(--muted)}
+.pk-cat svg{position:absolute; right:13px; top:50%; margin-top:-6px; color:var(--muted)}
 .pk-n{margin:14px 0 2px; font-size:13px; font-weight:600; color:var(--muted)}
 .pk-res{flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; margin:0 -16px; padding:0 16px}
 .pk-new{flex:0 0 auto; padding:4px 0 calc(14px + env(safe-area-inset-bottom))}

@@ -299,13 +299,31 @@ function restGoNext(){
   if(REST.info&&REST.info.sid)openSession(REST.info.sid,{keep:true});
   LG.open=n.id; render(); lgScroll(n.id);
 }
-function restAudio(){ try{ const AC=window.AudioContext||window.webkitAudioContext; if(!AC)return; if(!REST.ac)REST.ac=new AC(); if(REST.ac.state==='suspended')REST.ac.resume(); }catch(e){} }
+// Le son : sur iPhone, Web Audio est coupé par le bouton silencieux (session « ambient »). On demande une
+// session « transient » (sons brefs, la musique baisse un instant puis reprend) quand Safari le permet,
+// et l'AudioContext est créé et débloqué au toucher (iOS ne joue rien sans geste de l'utilisateur).
+function restAudio(){
+  try{ if(navigator.audioSession&&navigator.audioSession.type!=='transient')navigator.audioSession.type='transient'; }catch(e){}
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext; if(!AC)return;
+    if(!REST.ac||REST.ac.state==='closed')REST.ac=new AC();
+    if(REST.ac.state!=='running')REST.ac.resume();
+    // un son muet joué pendant le geste débloque la sortie audio pour le bip de fin
+    const o=REST.ac.createOscillator(), g=REST.ac.createGain(); g.gain.value=0.0001; o.connect(g); g.connect(REST.ac.destination); o.start(); o.stop(REST.ac.currentTime+0.02);
+  }catch(e){}
+}
 function restBeep(){
   const ac=REST.ac; if(!ac)return;
-  try{ [0,0.24].forEach(t0=>{ const o=ac.createOscillator(), g=ac.createGain(), t=ac.currentTime+t0; o.type='sine'; o.frequency.value=880;
-    g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.3,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+0.18);
-    o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+0.2); }); }catch(e){}
+  try{
+    if(ac.state!=='running')ac.resume();
+    // trois bips nets et forts (onde triangle, 1 kHz)
+    [0,0.28,0.56].forEach((t0,i)=>{ const o=ac.createOscillator(), g=ac.createGain(), t=ac.currentTime+0.05+t0; o.type='triangle'; o.frequency.value=i===2?1320:1000;
+      g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.9,t+0.015); g.gain.setValueAtTime(0.9,t+0.16); g.gain.exponentialRampToValueAtTime(0.0001,t+0.22);
+      o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+0.24); });
+  }catch(e){}
 }
+// au retour dans l'app, le premier toucher redébloque le son (iOS le suspend en arrière-plan)
+document.addEventListener('touchend',()=>{ if(REST.ac&&REST.ac.state!=='running')restAudio(); },{passive:true});
 
 // ---- Programme : constructeur, textes du profil, choix de l'onboarding ----
 // Le coach (src/training/ui/coach.js) pose ses questions puis propose ses séances ; hooks : { onDone, openEditor }

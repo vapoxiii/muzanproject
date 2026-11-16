@@ -54,7 +54,13 @@ test('illustrations : séance, grande image, bibliothèque et réglages', async 
   await page.click('[data-open="hautA"]');
   await page.click('[data-act="pick"]');
   const pk = page.locator('.pk');
+  await pk.locator('[data-cat="pecs"]').click();
+  await pk.locator('[data-eqg="barre"]').click();
   await expect.poll(() => loaded(pk.locator('.pk-it[data-x="dc-barre"] .ex-th img'))).toBe(true);
+  await pk.locator('[data-act="up"]').click();
+  await pk.locator('[data-act="up"]').click();
+  await pk.locator('[data-cat="jambes"]').click();
+  await pk.locator('[data-eqg="barre"]').click();
   await expect(pk.locator('.pk-it[data-x="squat"] .ex-th.none svg')).toHaveCount(1);
   await pk.locator('.pk-done').click();
   // réglages d'un exercice illustré : le geste en grand, au-dessus des curseurs

@@ -337,15 +337,25 @@ export function openExerciseSheet(ctx, sid, eid, { onChange = null } = {}) {
 }
 
 // ---- Choisir des exercices dans la bibliothèque ----
+// Choix d'un exercice : le muscle, puis le matériel, puis la liste (ou une recherche, à plat).
+const PK_CATS = [
+  ['pecs', 'Pectoraux', ['pecs']], ['dos', 'Dos', ['dos', 'lombaires', 'trapezes']], ['epaules', 'Épaules', ['epaules']],
+  ['biceps', 'Biceps', ['biceps']], ['triceps', 'Triceps', ['triceps']], ['avbras', 'Avant-bras', ['avbras']],
+  ['jambes', 'Jambes et fessiers', ['quadris', 'ischios', 'fessiers', 'adducteurs', 'mollets']], ['abdos', 'Abdos', ['abdos']],
+  ['autres', 'Corps entier et cardio', ['complet', 'cardio', 'cou']],
+];
+const PK_EQ = [
+  ['pdc', 'Poids du corps', ['pdc', 'anneaux']], ['halteres', 'Haltères', ['halteres', 'kb']], ['machine', 'Machine', ['machine', 'smith']],
+  ['poulie', 'Poulie', ['poulie']], ['barre', 'Barre', ['barre', 'ez', 'trapbar', 'landmine']], ['autre', 'Autre matériel', ['elastique', 'disque', 'ballon', 'autre']],
+];
 export function openPicker(ctx, sid, { replace = null, onChange = null } = {}) {
   let P = clone(ctx.program());
-  let q = '', m = '', eq = '', creating = false;
+  let q = '', cat = '', eqg = '', creating = false;
   const added = new Map();      // exercice de la bibliothèque → exercice ajouté pendant ce choix
   const node = el(`<div class="sheet tr-sheet pk">
     <div class="sheeth"><span class="st">${replace ? 'Remplacer par…' : 'Ajouter des exercices'}</span><button type="button" class="pk-done" data-act="close">${replace ? 'Annuler' : 'Terminé'}</button></div>
     <label class="pk-q">${ICON.search}<input type="search" id="pkQ" placeholder="Chercher : squat, curl, poulie…" autocomplete="off" spellcheck="false" enterkeyhint="search" aria-label="Chercher un exercice"></label>
-    <div class="pk-chips" role="group" aria-label="Muscle"><button type="button" data-m="" aria-pressed="true">Tous</button>${Object.entries(TR.MUSCLES).map(([k, l]) => `<button type="button" data-m="${k}" aria-pressed="false">${l}</button>`).join('')}</div>
-    <div class="pk-chips sm" role="group" aria-label="Matériel"><button type="button" data-e="" aria-pressed="true">Tout le matériel</button>${Object.entries(TR.EQUIP).map(([k, l]) => `<button type="button" data-e="${k}" aria-pressed="false">${l}</button>`).join('')}</div>
+    <div class="pk-nav"></div>
     <p class="pk-n" aria-live="polite"></p>
     <div class="pk-res"></div>
     <div class="pk-new"></div>
@@ -358,12 +368,13 @@ export function openPicker(ctx, sid, { replace = null, onChange = null } = {}) {
   const save = () => { P = clone(ctx.save(P)); if (onChange) onChange(); };
 
   function draw() {
-    const list = TR.searchExos(q, { m, e: eq, extra: extra() });
+    const all = TR.searchExos('', { extra: extra() });
+    const list = q.trim() ? TR.searchExos(q, { extra: extra() }) : all;
     const s = ses();
     const inSes = new Set(s ? s.ex.map((x) => x.x) : []);
-    count.textContent = list.length ? list.length + ' exercice' + (list.length > 1 ? 's' : '') : 'Aucun exercice trouvé';
-    // sous le nom : ce que l'exercice travaille (lvl 0 : la cible en entier ; 1 : dans la liste de son
-    // muscle, le nom court de la cible ; 2 : dans le groupe de sa cible, rien), puis le matériel
+    const nav = node.querySelector('.pk-nav');
+    // sous le nom : ce que l'exercice travaille (lvl 0 : la cible en entier ; 1 : le nom court de la cible ;
+    // 2 : rien, le groupe le dit déjà), puis le matériel
     const item = (x, lvl = 0) => {
       const on = added.has(x.id), here = !on && inSes.has(x.id);
       const k = lvl === 0 ? TR.cibleName(x) : lvl === 1 && x.c ? TR.CIBLES[x.c].s : '';
@@ -372,27 +383,47 @@ export function openPicker(ctx, sid, { replace = null, onChange = null } = {}) {
         <span class="pk-add" aria-hidden="true">${replace ? ICON.swap : on ? ICON.check : ICON.plus}</span></button>`;
     };
     const group = (title, xs, lvl) => `<p class="pk-g">${esc(title)} <span>${xs.length}</span></p>` + xs.map((x) => item(x, lvl)).join('');
+    const tiles = (key, defs, xs, of) => `<div class="pk-cats">${defs.map(([k, l, ms]) => {
+      const n = xs.filter((x) => ms.includes(of(x))).length;
+      return n ? `<button type="button" class="pk-cat" data-${key}="${k}"><b>${esc(l)}</b><span>${n} exercice${n > 1 ? 's' : ''}</span>${ICON.chev}</button>` : '';
+    }).join('')}</div>`;
     let html = '';
-    // remplacer : d'abord les exercices de la même cible (ils travaillent pareil)
-    const cur = replace && s ? TR.exoOf(s.ex.find((y) => y.id === replace) || {}, P) : null;
-    if (cur && cur.c && !q.trim() && !m && !eq) {
-      const same = list.filter((x) => x.c === cur.c && x.id !== cur.id && x.mode === cur.mode && !inSes.has(x.id));
-      if (same.length) html += group('Travaillent pareil : ' + TR.CIBLES[cur.c].n.toLowerCase(), same, 2);
-    }
-    if (q.trim()) html = list.map((x) => item(x)).join('');
-    else if (!m) {
-      // toute la bibliothèque, rangée par muscle (les plus courants en tête de chaque groupe)
-      const groups = {};
-      for (const x of list) (groups[x.m] = groups[x.m] || []).push(x);
-      for (const k of Object.keys(TR.MUSCLES)) if (groups[k]) html += group(TR.MUSCLES[k], groups[k], 1);
+    if (q.trim()) {
+      // recherche : toute la bibliothèque, à plat
+      nav.innerHTML = '';
+      count.textContent = list.length ? list.length + ' exercice' + (list.length > 1 ? 's' : '') : 'Aucun exercice trouvé';
+      html = list.map((x) => item(x)).join('');
+    } else if (!cat) {
+      // 1) le muscle
+      nav.innerHTML = '';
+      count.textContent = 'Choisis un muscle';
+      const cur = replace && s ? TR.exoOf(s.ex.find((y) => y.id === replace) || {}, P) : null;
+      if (cur && cur.c) {
+        const same = all.filter((x) => x.c === cur.c && x.id !== cur.id && x.mode === cur.mode && !inSes.has(x.id));
+        if (same.length) html += group('Travaillent pareil : ' + TR.CIBLES[cur.c].n.toLowerCase(), same, 2);
+      }
+      html += tiles('cat', PK_CATS, all, (x) => x.m);
     } else {
-      // un muscle : rangé par cible (longue portion, courte portion…), puis ceux qui le sollicitent aussi
-      const prim = list.filter((x) => x.m === m), sec = list.filter((x) => x.m !== m);
-      const byC = new Map();
-      for (const x of prim) { const c = x.c || ''; if (!byC.has(c)) byC.set(c, []); byC.get(c).push(x); }
-      const keys = Object.keys(TR.CIBLES).filter((c) => byC.has(c)).concat(byC.has('') ? [''] : []);
-      html = keys.length > 1 ? keys.map((c) => group(c ? TR.CIBLES[c].n : 'Créés par toi', byC.get(c), 2)).join('') : prim.map((x) => item(x, 2)).join('');
-      if (sec.length) html += group('Sollicitent aussi : ' + TR.MUSCLES[m].toLowerCase(), sec, 0);
+      const C = PK_CATS.find((c) => c[0] === cat), inCat = all.filter((x) => C[2].includes(x.m));
+      if (!eqg) {
+        // 2) le matériel
+        nav.innerHTML = `<button type="button" class="pk-up" data-act="up">${ICON.back}<span>Muscles</span></button><b class="pk-here">${esc(C[1])}</b>`;
+        count.textContent = 'Choisis le matériel';
+        html = tiles('eqg', PK_EQ, inCat, (x) => x.e);
+      } else {
+        // 3) les exercices : rangés par muscle (jambes, dos…) ou par cible (haut des pectoraux…)
+        const E = PK_EQ.find((e) => e[0] === eqg), xs = inCat.filter((x) => E[2].includes(x.e));
+        nav.innerHTML = `<button type="button" class="pk-up" data-act="up">${ICON.back}<span>${esc(C[1])}</span></button><b class="pk-here">${esc(E[1])}</b>`;
+        count.textContent = xs.length + ' exercice' + (xs.length > 1 ? 's' : '');
+        if (C[2].length > 1) {
+          for (const m of C[2]) { const g = xs.filter((x) => x.m === m); if (g.length) html += group(TR.MUSCLES[m], g, 1); }
+        } else {
+          const byC = new Map();
+          for (const x of xs) { const c = x.c || ''; if (!byC.has(c)) byC.set(c, []); byC.get(c).push(x); }
+          const keys = Object.keys(TR.CIBLES).filter((c) => byC.has(c)).concat(byC.has('') ? [''] : []);
+          html = keys.length > 1 ? keys.map((c) => group(c ? TR.CIBLES[c].n : 'Créés par toi', byC.get(c), 2)).join('') : xs.map((x) => item(x, 2)).join('');
+        }
+      }
     }
     res.innerHTML = html;
     const qt = input.value.trim();
@@ -405,7 +436,7 @@ export function openPicker(ctx, sid, { replace = null, onChange = null } = {}) {
     return `<div class="pk-form"><p class="pe-lab">Nouvel exercice</p>
       <input type="text" id="pkName" value="${esc(name)}" maxlength="60" aria-label="Nom de l’exercice" autocomplete="off">
       <p class="pe-lab">Muscle principal</p>
-      <div class="pk-chips wrap" role="group" aria-label="Muscle principal">${Object.entries(TR.MUSCLES).map(([k, l]) => `<button type="button" data-nm="${k}" aria-pressed="${k === (m || 'pecs')}">${l}</button>`).join('')}</div>
+      <div class="pk-chips wrap" role="group" aria-label="Muscle principal">${Object.entries(TR.MUSCLES).map(([k, l]) => `<button type="button" data-nm="${k}" aria-pressed="${k === ((PK_CATS.find((c) => c[0] === cat) || [0, 0, ['pecs']])[2][0])}">${l}</button>`).join('')}</div>
       <p class="pe-lab">Se mesure en</p>
       <div class="xs-modes" role="group" aria-label="Mesure">${[['r', 'Répétitions'], ['t', 'Durée'], ['d', 'Distance']].map(([k, l], i) => `<button type="button" data-nmode="${k}" aria-pressed="${i === 0}">${l}</button>`).join('')}</div>
       <button type="button" class="tr-btn wide" data-act="create">Créer et ajouter</button></div>`;
@@ -419,8 +450,9 @@ export function openPicker(ctx, sid, { replace = null, onChange = null } = {}) {
     const b = e.target.closest('button');
     if (!b) return;
     if (b.dataset.act === 'close') { close(); return; }
-    if (b.dataset.m != null) { m = b.dataset.m; node.querySelectorAll('[data-m]').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); draw(); return; }
-    if (b.dataset.e != null) { eq = b.dataset.e; node.querySelectorAll('[data-e]').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); draw(); return; }
+    if (b.dataset.cat) { cat = b.dataset.cat; eqg = ''; draw(); res.scrollTop = 0; return; }
+    if (b.dataset.eqg) { eqg = b.dataset.eqg; draw(); res.scrollTop = 0; return; }
+    if (b.dataset.act === 'up') { if (eqg) eqg = ''; else cat = ''; draw(); res.scrollTop = 0; return; }
     if (b.dataset.nm) { node.querySelectorAll('[data-nm]').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); return; }
     if (b.dataset.nmode) { node.querySelectorAll('[data-nmode]').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); return; }
     if (b.dataset.act === 'new') { creating = true; draw(); const f = node.querySelector('#pkName'); if (f) f.focus(); return; }
