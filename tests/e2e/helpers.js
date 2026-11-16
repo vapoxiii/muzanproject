@@ -17,7 +17,8 @@ export async function startServer(dist = join(ROOT, process.env.DIST || 'dist'))
 export function localFontsCss(baseUrl, dist = join(ROOT, process.env.DIST || 'dist')) {
   const files = readdirSync(join(dist, 'assets'));
   const pick = (re) => files.find((f) => re.test(f));
-  let css = `@font-face{font-family:'Bebas Neue';font-style:normal;font-weight:400;font-display:swap;src:url(${baseUrl}/assets/${pick(/^bebas-neue-latin-400-normal-.*\.woff2$/)}) format('woff2')}\n`;
+  let css = '';
+  for (const w of [700, 800]) css += `@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:${w};font-display:swap;src:url(${baseUrl}/assets/${pick(new RegExp(`^plus-jakarta-sans-latin-${w}-normal-.*\\.woff2$`))}) format('woff2')}\n`;
   for (const w of [500, 600, 700, 800, 900]) {
     css += `@font-face{font-family:'Inter';font-style:normal;font-weight:${w};font-display:swap;src:url(${baseUrl}/assets/${pick(new RegExp(`^inter-latin-${w}-normal-.*\\.woff2$`))}) format('woff2')}\n`;
   }

@@ -6,58 +6,61 @@
 <title>Mon suivi</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Suivi">
-<meta name="theme-color" content="#0B0A0F">
+<meta name="theme-color" content="#F6F4FB">
 <meta name="ms-version" content="__MS_VERSION__">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="description" content="Suivi entraînement, nutrition, mesures et photos.">
-<style>html.boot body>*{visibility:hidden}html.boot body{background:#0B0A0F}</style>
+<style>html.boot body>*{visibility:hidden}html.boot body{background:#F6F4FB}</style>
 <script>setTimeout(function(){document.documentElement.classList.remove("boot")},6000)</script>
 </head>
 <body>
 <div id="app">
   <section class="view" id="v-home" data-view="home" aria-label="Accueil">
-    <img id="renFace" src="/src/assets/img/ren-portrait.webp" alt="" hidden>
+    <img id="renFace" src="/src/assets/img/ren-l-portrait.webp" alt="" hidden>
     <!-- L'accueil, c'est le personnage : rang, niveau, sa phrase du jour, les infos du jour.
          Le toucher ouvre la roue (src/home/wheel.js) ; chaque partie a une maison pour revenir ici. -->
     <div class="hd" id="hd" data-etat="pret">
       <div class="hd-bg" aria-hidden="true"></div>
-      <div class="hd-scrim" aria-hidden="true"></div>
-      <div class="hd-fig" aria-hidden="true"><img class="hd-p hd-p-repos" src="/src/assets/img/ren-repos.webp" alt="" decoding="async"><img class="hd-p hd-p-pret" src="/src/assets/img/ren-pret.webp" alt="" decoding="async"><img class="hd-p hd-p-concentre" src="/src/assets/img/ren-concentre.webp" alt="" decoding="async"><img class="hd-p hd-p-forme" src="/src/assets/img/ren-forme.webp" alt="" decoding="async"><img class="hd-p hd-p-zone" id="poseZone" src="/src/assets/img/ren-zone.webp" alt="" decoding="async"></div>
+      <div class="hd-fig" aria-hidden="true"><img class="hd-p hd-p-repos" src="/src/assets/img/ren-l-serviette.webp" alt="" decoding="async"><img class="hd-p hd-p-pret" src="/src/assets/img/ren-l-debout.webp" alt="" decoding="async"><img class="hd-p hd-p-concentre" src="/src/assets/img/ren-l-etirement.webp" alt="" decoding="async"><img class="hd-p hd-p-forme" src="/src/assets/img/ren-l-course.webp" alt="" decoding="async"><img class="hd-p hd-p-zone" id="poseZone" src="/src/assets/img/ren-l-dos.webp" alt="" decoding="async"></div>
       <button type="button" class="hd-ren" id="hdRen" aria-label="Ren : choisir où aller"></button>
       <div class="hd-ui">
         <header class="hd-info">
           <div class="hd-row">
+            <div class="hd-who"><img class="hd-face" id="hdFace" src="/src/assets/img/ren-l-portrait.webp" alt=""><span class="hd-who-t"><b id="hdWhoN">Ren</b><small>Coach</small></span></div>
             <button type="button" class="hd-rank" id="hzRankBtn" aria-label="Voir ta progression">
               <span class="rk-em" id="hzRankEm" data-tier="e"><span class="rk-em-in"><span class="rk-em-k">Rang</span><span class="rk-em-l" id="hzRank">E</span></span></span>
-              <span class="hd-rk-tx"><span class="rk-em-t" id="hzRankT">Recrue</span><span class="hd-rk-nx" id="hzRankNx"></span></span>
+              <span class="hd-rk-tx"><span class="rk-em-t" id="hzRankT">Recrue</span><span class="hd-lv">Niveau <b class="hd-n num" id="hzLvl">1</b></span></span>
             </button>
-            <p class="hd-lv"><span class="hd-k">Niveau</span><span class="hd-n num" id="hzLvl">1</span></p>
           </div>
           <div class="hd-bar"><i id="hzBar"></i></div>
-          <p class="hd-next"><span id="hzNext"></span><span class="hd-date" id="hzDate"></span></p>
+          <p class="hd-next"><span id="hzNext"></span><span class="hd-rk-nx" id="hzRankNx"></span></p>
         </header>
-        <div class="hd-say" id="hdSay"><p class="hd-say-w" id="hdSayW">Ren</p><p class="hd-say-t" id="hdSayT" aria-live="polite"></p></div>
-        <div class="hd-low">
-          <p class="hd-hint" id="hdHint">Touche Ren pour choisir où aller</p>
-          <div class="td" role="group" aria-label="Aujourd’hui">
-            <button type="button" class="td-b" id="goalB">
-              <span class="td-k" id="goalOv">Séance du jour</span>
-              <span class="td-t" id="goalT">—</span>
-              <span class="td-m" id="goalM"></span>
-              <span class="bar td-bar" id="goalBarW" hidden><i id="goalBar"></i></span>
-            </button>
-            <button type="button" class="td-b" id="tdKcal">
-              <span class="td-k" id="tdKcalK">Il te reste</span>
-              <span class="td-t num" id="tdKcalN">—</span>
-              <span class="td-m" id="tdKcalP"></span>
-              <span class="bar td-bar"><i id="tdKcalB"></i></span>
-            </button>
-          </div>
+        <div class="hd-say" id="hdSay"><p class="hd-say-w vh-only" id="hdSayW">Ren</p><p class="hd-say-t" id="hdSayT" aria-live="polite"></p></div>
+        <p class="hd-hint" id="hdHint">Touche Ren pour choisir où aller</p>
+      </div>
+      <div class="hd-low">
+        <p class="hd-date" id="hzDate"></p>
+        <div class="td" role="group" aria-label="Aujourd’hui">
+          <button type="button" class="td-b" id="goalB">
+            <i class="td-ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7.5v9M17 7.5v9M4.5 10v4M19.5 10v4M7 12h10"/></svg></i>
+            <span class="td-k" id="goalOv">Séance du jour</span>
+            <span class="td-t" id="goalT">—</span>
+            <span class="td-m" id="goalM"></span>
+            <span class="bar td-bar" id="goalBarW" hidden><i id="goalBar"></i></span>
+          </button>
+          <button type="button" class="td-b" id="tdKcal">
+            <i class="td-ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5v7.5M5 3.5V8a2 2 0 0 0 4 0V3.5M7 11v9.5M16.5 3.5c-1.8 0-3 2.2-3 5.2 0 2.6 1.2 3.8 3 3.8v8"/></svg></i>
+            <span class="td-k" id="tdKcalK">Il te reste</span>
+            <span class="td-t num" id="tdKcalN">—</span>
+            <span class="td-m" id="tdKcalP"></span>
+            <span class="bar td-bar"><i id="tdKcalB"></i></span>
+          </button>
         </div>
+        <button type="button" class="hd-wk" id="hdWk"><span class="hd-wk-t"><b>Ta semaine</b><span id="hdWkT"></span></span><span class="bar"><i id="hdWkB"></i></span></button>
       </div>
     </div>
   </section>
@@ -79,7 +82,7 @@
           <p class="th-wk"><span class="th-pips" id="thPips" aria-hidden="true"></span><span id="trmeta"></span></p>
         </header>
         <div class="th-stage">
-          <div class="th-fig" aria-hidden="true"><img class="th-p th-p-concentre" src="/src/assets/img/ren-concentre-haut.webp" alt="" decoding="async"><img class="th-p th-p-zone" src="/src/assets/img/ren-zone-haut.webp" alt="" decoding="async"><img class="th-p th-p-forme" src="/src/assets/img/ren-forme-haut.webp" alt="" decoding="async"></div>
+          <div class="th-fig" aria-hidden="true"><img class="th-p th-p-concentre" src="/src/assets/img/ren-l-etirement.webp" alt="" decoding="async"><img class="th-p th-p-zone" src="/src/assets/img/ren-l-serviette.webp" alt="" decoding="async"><img class="th-p th-p-forme" src="/src/assets/img/ren-l-debout.webp" alt="" decoding="async"></div>
           <div class="ph-say th-say"><p class="ph-say-w" id="thWho">Ren</p><p class="ph-say-t" id="thSay" aria-live="polite"></p></div>
         </div>
         <div class="th-low">
@@ -101,9 +104,17 @@
   <section class="view part" id="v-nutrition" data-view="nutrition" aria-label="Nutrition" hidden>
     <!-- Entrée de la partie : Ren, sa phrase du moment, les rubriques en tuiles. Une rubrique s'ouvre
          seule, avec un retour vers l'entrée (11-accueil.js : openSub, setHub). -->
-    <div class="ph" id="nutHub">
-      <div class="ph-bg" aria-hidden="true"></div>
-      <img class="ph-fig" src="/src/assets/img/ren-forme.webp" alt="" aria-hidden="true" decoding="async">
+    <div class="ph kz-on" id="nutHub" data-ambiance="jour" data-moment="jour">
+      <!-- La cuisine : son ambiance suit le soleil (jour, coucher de soleil, nuit ; src/nutrition/kitchen.js).
+           On touche la balance pour noter ce qu'on a mangé ; elle affiche les calories du jour. -->
+      <div class="kz" id="kz">
+        <img class="kz-img" id="kzImg" src="/src/assets/img/cuisine/cuisine-jour.webp" alt="" decoding="async">
+        <i class="kz-lcd" aria-hidden="true"></i>
+        <p class="kz-val" id="kzVal" aria-hidden="true"><b class="num">0</b><small>kcal</small></p>
+        <button type="button" class="kz-hot kz-scale" id="kzScale" aria-label="La balance : ajouter ce que tu as mangé"><span class="kz-ring" aria-hidden="true"></span><span class="kz-chip"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Ajouter un repas</span></button>
+        <button type="button" class="kz-hot kz-jars" id="kzJars" aria-label="Mes aliments"><span class="kz-chip sm">Mes aliments</span></button>
+      </div>
+      <div class="kz-scrim" aria-hidden="true"></div>
       <div class="ph-ui">
         <header class="ph-top"><h1 class="ph-t" tabindex="-1">Nutrition</h1><p class="ph-s" id="nhSub"></p></header>
         <div class="ph-say"><p class="ph-say-w" id="nhWho">Ren</p><p class="ph-say-t" id="nhSay" aria-live="polite"></p></div>
@@ -311,8 +322,11 @@
     <div class="foot" id="pfFoot">Tes coches sont sauvegardées automatiquement, en local sur ton téléphone.</div>
   </section>
 </div>
-<nav class="homebar" id="homebar" aria-label="Retour à l’accueil" hidden>
-  <button type="button" class="homebtn" id="homeBtn" aria-label="Accueil"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.2 12 4.5l8 6.7M6.5 9.6V19.5h11V9.6"/></svg></button>
+<nav class="mainnav" id="mainnav" aria-label="Navigation principale">
+  <button type="button" class="nv" data-tab="home" id="homeBtn" aria-label="Accueil"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.2 12 4.5l8 6.7M6.5 9.6V19.5h11V9.6"/></svg></button>
+  <button type="button" class="nv" data-tab="menu" id="menuBtn" aria-label="Menu : où on va ?"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.8"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.8"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.8"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.8"/></svg></button>
+  <button type="button" class="nv" data-tab="progress" id="progBtn" aria-label="Progression"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 19.5v-6M12 19.5V5.5M18 19.5v-9.5"/></svg></button>
+  <button type="button" class="nv" data-tab="profile" id="profBtn" aria-label="Profil"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.2" r="3.6"/><path d="M5 20c1.1-3.6 3.9-5.6 7-5.6s5.9 2 7 5.6"/></svg></button>
 </nav>
 <div id="picker" class="modal pkm" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="pickT">
   <div class="sheeth"><span class="st" id="pickT">Ajouter un aliment</span><button type="button" id="pickclose" aria-label="Fermer">✕</button></div>

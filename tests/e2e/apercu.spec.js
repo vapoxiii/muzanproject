@@ -46,7 +46,7 @@ const tab = (page, v) => page.evaluate((v) => document.querySelector(`.wh-sl[dat
 test('l’aperçu s’ouvre avec l’exemple, sans erreur, polices et images comprises', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const { page, errors, failed } = await open(context);
-  expect(await page.evaluate(() => document.fonts.check('800 16px Inter') && document.fonts.check('16px "Bebas Neue"'))).toBe(true);
+  expect(await page.evaluate(() => document.fonts.check('800 16px Inter') && document.fonts.check('800 16px "Plus Jakarta Sans"'))).toBe(true);
   const broken = await page.evaluate(() => [...document.images].filter((i) => i.getAttribute('src') && i.complete && i.naturalWidth === 0).map((i) => i.src));
   expect(broken).toEqual([]);
   await expect(page.locator('#onb')).toBeHidden();

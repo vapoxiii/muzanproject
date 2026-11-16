@@ -18,7 +18,7 @@ async function open(browser) {
   await page.goto(srv.url + '/index.html');
   await page.waitForLoadState('load');
   await page.clock.runFor(1500);
-  await page.waitForFunction(() => !!document.querySelector('.nav-item, #homebar, [data-view]'));
+  await page.waitForFunction(() => !!document.querySelector('#mainnav, [data-view]'));
   await page.clock.runFor(500);
   return { context, page, errors };
 }

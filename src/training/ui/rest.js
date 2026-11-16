@@ -1,5 +1,5 @@
-// Écran de repos : Ren tend son poignet vers toi, sa montre affiche l'heure du téléphone et le vrai
-// décompte du repos. S'ouvre quand une série est validée (02-seance.js, restStart) ; la barre de
+// Écran de repos : Ren récupère, la serviette sur l'épaule ; à côté de lui, un grand cadran rond affiche
+// l'heure du téléphone et le vrai décompte du repos. S'ouvre quand une série est validée (02-seance.js, restStart) ; la barre de
 // repos reste en dessous quand on le ferme.
 //
 // Huit éléments indépendants, chacun avec sa classe et ses réglages de place (training.css, « Écran
@@ -16,10 +16,8 @@
 
 import { fmtCountdown, fmtClock } from '../rest.js';
 import { esc, el, openLayer, REDUCED } from './dom.js';
-// Ren qui montre sa montre : illustration provisoire (cadran vidé), à remplacer par la version
-// définitive ; réglage du cadran sur le poignet : variables --rw-* de .rr-ren (training.css)
-import REN_IMG from '../../assets/img/ren-montre.webp';
-import BG_IMG from '../../assets/img/hd-bg.webp';
+// Ren, la serviette sur l'épaule (détouré) ; le cadran est posé à côté de lui, en code
+import REN_IMG from '../../assets/img/ren-l-serviette.webp';
 
 const IC = {
   back: '<svg width="11" height="18" viewBox="0 0 11 18" aria-hidden="true"><path d="M9 2 2 9l7 7" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
@@ -36,14 +34,14 @@ const KIND = { set: 'Prochaine série', exercise: 'Prochain exercice', end: 'Apr
 export function openRestScreen(ctx) {
   const t = ctx.timer;
   const node = el(`<div class="rr">
-    <div class="rr-bg" aria-hidden="true"><img class="rr-bg-img" src="${esc(ctx.bg || BG_IMG)}" alt=""><i class="rr-light l1"></i><i class="rr-light l2"></i><i class="rr-light l3"></i><i class="rr-win"></i><i class="rr-grain"></i></div>
+    <div class="rr-bg" aria-hidden="true">${ctx.bg ? `<img class="rr-bg-img" src="${esc(ctx.bg)}" alt="">` : ''}</div>
     <header class="rr-top">
       <button type="button" class="rr-back" data-a="close" aria-label="Revenir à la séance">${IC.back}</button>
       <div class="rr-progw"><div class="rr-prog" role="img"></div><p class="rr-where"></p></div>
     </header>
     <div class="rr-stage">
       <div class="rr-ren">
-        <img class="rr-ren-img" src="${esc(ctx.ren || REN_IMG)}" alt="Ren tend son poignet et te montre sa montre" decoding="async">
+        <img class="rr-ren-img" src="${esc(ctx.ren || REN_IMG)}" alt="Ren récupère, la serviette sur l’épaule" decoding="async">
         <div class="rw">
           <i class="rw-strap top" aria-hidden="true"></i><i class="rw-strap bot" aria-hidden="true"></i>
           <i class="rw-crown" aria-hidden="true"></i><i class="rw-side" aria-hidden="true"></i>

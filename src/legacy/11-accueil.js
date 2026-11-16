@@ -121,7 +121,15 @@ function renderHome(xp){
   document.getElementById('hzNext').textContent=nf(next-xp)+' XP avant le niveau '+(L+1);
   const hx=document.getElementById('hzXp'); if(hx)hx.textContent=nf(xp-start)+' / '+nf(next-start)+' XP sur le niveau '+L;
   const he=document.getElementById('hzEtat'); if(he)he.textContent=et.l;
-  renderGoal(); renderToday(); renderHeroTexts();
+  renderGoal(); renderToday(); renderHeroTexts(); renderHomeWeek();
+}
+// Accueil, en bas : la semaine (séances faites sur prévues, et la note de la semaine en barre)
+function renderHomeWeek(){
+  const t=document.getElementById('hdWkT'), b=document.getElementById('hdWkB'); if(!t||!b)return;
+  const st=curWeekState(), n=sessionsDone(st), tot=TR.mainCount(st), sc=Math.round(weekScore(st));
+  t.textContent=n+' séance'+(n>1?'s':'')+' sur '+tot;
+  b.style.width=Math.max(2,Math.min(100,sc))+'%';
+  document.getElementById('hdWk').setAttribute('aria-label','Ta semaine : '+n+' séance'+(n>1?'s':'')+' sur '+tot+'. Voir la progression');
 }
 function coachSaved(){ try{ return JSON.parse(sget('coach')||'null'); }catch(e){ return null; } }
 // Entrée de la Nutrition : le jour en une ligne, la phrase de Ren, le détail de chaque tuile
@@ -136,7 +144,7 @@ function renderNutritionHub(){
   else if(left<0)line=tough?'Objectif dépassé de '+nf(-left)+' kcal. On se recadre demain.':'Objectif dépassé de '+nf(-left)+' kcal. Pas grave, demain on repart.';
   else if(!pl)line='Protéines validées. Il te reste '+nf(left)+' kcal.';
   else line='Il te reste '+nf(left)+' kcal, dont '+nf(pl)+' g de protéines à trouver.';
-  say.textContent=line.replace(/ ([?!:;])/g,'\u00a0$1');
+  say.innerHTML=sayTwoTone(line.replace(/ ([?!:;])/g,'\u00a0$1').replace(/(\d) (g|kcal)\b/g,'$1\u00a0$2'));
   const who=document.getElementById('nhWho'), id=co&&co.id==='aya'?'aya':'ren';
   if(who)who.textContent=id==='aya'?'Aya':'Ren';
   const hub=document.getElementById('nutHub'); if(hub)hub.classList.toggle('no-fig',id!=='ren');
@@ -267,7 +275,6 @@ function showView(v,sub,focus){
   const was=curView; curView=v;
   if(v!=='home'&&WHEEL)WHEEL.close();
   document.querySelectorAll('.view').forEach(s=>{ s.hidden=s.getAttribute('data-view')!==v; });
-  const hb=document.getElementById('homebar'); if(hb)hb.hidden=v==='home';
   document.documentElement.classList.toggle('at-home',v==='home');
   document.documentElement.classList.remove('at-hub');
   // une partie à rubriques en tuiles s'ouvre sur son entrée, sauf si on demande une rubrique
@@ -276,6 +283,7 @@ function showView(v,sub,focus){
   window.scrollTo(0,0);
   if(v==='home'&&was!=='home')replayHome();
   if(focus)focusTitle(v);
+  tabSync();
 }
 function focusTitle(v){
   const hub=hubOf(v), t=document.querySelector(hub&&!hub.hidden?'#v-'+v+' .ph-t':'#v-'+v+' .vh-t');
@@ -352,8 +360,19 @@ function hubAct(v,act){
 document.getElementById('goalB').onclick=()=>{ const tgt=document.getElementById('goalB').getAttribute('data-target'); if(tgt==='program'){ goToday(); showView('training'); } else goSession(tgt); };
 document.getElementById('tdKcal').onclick=()=>{ goToday(); showView('nutrition','repas'); };
 document.getElementById('hzRankBtn').onclick=()=>showView('progress','rang');
+document.getElementById('hdWk').onclick=()=>showView('progress','semaines');
 document.getElementById('pfFaceBtn').onclick=()=>showView('progress','rang');
-document.getElementById('homeBtn').onclick=()=>showView('home');
+// Barre de navigation : Accueil, Menu (la roue « Où on va ? »), Progression, Profil.
+// Les parties ouvertes depuis la roue (Training, Nutrition, Sports, Corps) allument le Menu.
+function tabSync(){
+  const wh=WHEEL&&WHEEL.isOpen();
+  const cur=wh?'menu':curView==='home'?'home':curView==='progress'?'progress':curView==='profile'?'profile':'menu';
+  document.querySelectorAll('#mainnav .nv').forEach(b=>{ if(b.dataset.tab===cur)b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
+}
+document.getElementById('homeBtn').onclick=()=>{ if(WHEEL&&WHEEL.isOpen())WHEEL.close(); showView('home'); };
+document.getElementById('menuBtn').onclick=()=>{ if(curView!=='home')showView('home'); if(WHEEL&&!WHEEL.isOpen())WHEEL.open(); else if(WHEEL)WHEEL.close(); tabSync(); };
+document.getElementById('progBtn').onclick=()=>showView('progress');
+document.getElementById('profBtn').onclick=()=>showView('profile');
 document.getElementById('nutBack').onclick=()=>goToday();
 document.getElementById('pfCalB').onclick=()=>document.getElementById('basebtn').click();
 document.getElementById('moment').addEventListener('click',hideMoment);
@@ -366,9 +385,11 @@ WHEEL=HOME.mountWheel({
   centerSrc:()=>{ if(heroIsAvatar()){ const cv=document.getElementById('hdAv'); try{ if(cv&&cv.width){
       const n=Math.round(cv.width*0.5), c=document.createElement('canvas'); c.width=c.height=n;
       c.getContext('2d').drawImage(cv,Math.round((cv.width-n)/2),Math.round(cv.height*0.05),n,n,0,0,n,n); return c.toDataURL('image/png'); } }catch(e){} }
-    const im=document.querySelector('.hd-p-concentre'); return im?im.src:''; },
+    const im=document.getElementById('hdFace'); return im?im.src:''; },
   onPick:(k)=>showView(k,null,true),
+  onToggle:(on)=>{ document.documentElement.classList.toggle('wh-open',on); tabSync(); },
 });
+tabSync();
 
 // Branchement sur les rendus existants (après eux, sans les modifier)
 const _uhV3=updateHero; updateHero=function(){ _uhV3(); try{ refreshV3(false); }catch(e){ console.error(e); } };

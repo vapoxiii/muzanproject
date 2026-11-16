@@ -110,14 +110,25 @@ function coachLineToday() {
 // La phrase du jour, dans la bulle de l'accueil. Le visage du coach n'y figure que si ce n'est pas
 // lui, en grand, sur l'accueil (Aya, ou l'avatar choisi à la place de Ren).
 let lastSay = '';
+// la phrase en deux tons : le début en encre, la fin (la séance, le chiffre, l'envie) en violet
+function sayTwoTone(line) {
+  const w = line.split(' ');
+  if (w.length < 3) return '<em>' + esc(line) + '</em>';
+  let k = line.indexOf(' : ') > 0 ? line.slice(0, line.indexOf(' : ') + 3).split(' ').length - 1 : Math.ceil(w.length * 0.5);
+  k = Math.max(1, Math.min(w.length - 1, k));
+  return esc(w.slice(0, k).join(' ')) + ' <em>' + esc(w.slice(k).join(' ')) + '</em>';
+}
 function coachIntoHome() {
   const w = document.getElementById('hdSayW'), t = document.getElementById('hdSayT'); if (!w || !t) return;
   // (espace insécable avant ? ! : ; comme on l'écrit en français : la ponctuation ne part pas seule à la ligne)
   const id = COACH && COACHES[COACH.id] ? COACH.id : 'ren', line = coachLineToday().replace(/ ([?!:;])/g, '\u00a0$1');
   const face = id !== 'ren' || document.getElementById('hd').classList.contains('av-on') ? coachFace(id) : '';
-  w.innerHTML = (face ? '<img src="' + face + '" alt="">' : '') + esc(COACHES[id].name);
+  w.textContent = COACHES[id].name;
+  const hn = document.getElementById('hdWhoN'); if (hn) hn.textContent = COACHES[id].name;
+  const hf = document.getElementById('hdFace'); if (hf) { const f = id !== 'ren' ? coachFace(id) : hf.dataset.ren || (hf.dataset.ren = hf.getAttribute('src')); if (f && hf.getAttribute('src') !== f) hf.src = f; }
+  void face;
   if (line === lastSay) return;
-  t.textContent = line;
+  t.innerHTML = sayTwoTone(line);
   if (lastSay) { const b = document.getElementById('hdSay'); b.classList.remove('in'); void b.offsetWidth; b.classList.add('in'); }
   lastSay = line;
 }
