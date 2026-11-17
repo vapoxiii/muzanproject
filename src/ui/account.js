@@ -1,6 +1,7 @@
 // Interface du compte : bloc « Compte » du Profil, fenêtre de connexion par code,
 // bandeaux (données reçues d'un autre appareil, nouvelle version), écran d'erreur.
 
+import { brandMark } from './brand.js';
 import { CLOUD_ENABLED, CONSENT_VERSION } from '../core/config.js';
 import { auth, onAuthChange, onAccountInfo, sendCode, verifyCode, signOut, deleteAccount, refreshAccount, getClient } from '../core/auth.js';
 import { connectAndSync } from '../core/cloud.js';
@@ -131,7 +132,7 @@ function renderModal() {
   const a = auth.account || {};
   if (modalStep === 'email') {
     $('accT').textContent = 'Ton compte';
-    B.innerHTML = `<p class="key-p">Sauvegarde tes séances, repas, mesures et photos, retrouve-les sur tous tes appareils, et utilise l’analyse IA des repas sans clé : <b>3 analyses offertes par jour</b>. Pas de mot de passe : tu reçois un code par e-mail.</p>
+    B.innerHTML = `<div class="acc-brand">${brandMark({ size: 'l' })}</div><p class="key-p">Sauvegarde tes séances, repas, mesures et photos, retrouve-les sur tous tes appareils, et utilise l’analyse IA des repas sans clé : <b>3 analyses offertes par jour</b>. Pas de mot de passe : tu reçois un code par e-mail.</p>
       <input id="accEmail" class="acc-in" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="ton@email.fr" aria-label="Adresse e-mail" value="${esc(pendingEmail)}">
       <label class="acc-ok"><input type="checkbox" id="accOk"> <span>J’accepte que mes données de suivi (séances, repas, poids, mensurations, et mes photos si je l’active) soient hébergées dans l’Union européenne pour être sauvegardées et synchronisées. Ce sont des données de santé : je peux tout supprimer à tout moment depuis le Profil. <a href="./confidentialite.html" target="_blank" rel="noopener">Détails</a></span></label>
       <p class="key-msg" id="accMsg" role="status"></p>
@@ -143,7 +144,7 @@ function renderModal() {
     if ($('accFile')) $('accFile').onclick = () => { closeAccount(); const f = $('bkFile'); if (f) { f.value = ''; f.click(); } };
   } else if (modalStep === 'code') {
     $('accT').textContent = 'Code de connexion';
-    B.innerHTML = `<p class="key-p">On vient d’envoyer un code à <b>${esc(pendingEmail)}</b>. Il arrive en général en moins d’une minute (pense aux indésirables).</p>
+    B.innerHTML = `<div class="acc-brand">${brandMark({ size: 'l' })}</div><p class="key-p">On vient d’envoyer un code à <b>${esc(pendingEmail)}</b>. Il arrive en général en moins d’une minute (pense aux indésirables).</p>
       <input id="accCode" class="acc-in acc-code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="000000" aria-label="Code reçu par e-mail">
       <p class="key-msg" id="accMsg" role="status"></p>
       <button type="button" class="aibtn" id="accVerify">Me connecter</button>

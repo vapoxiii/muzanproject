@@ -32,6 +32,7 @@ function legacyApp() {
           "import * as TB from '/src/body/trend.js';\n" +
           "import * as HOME from '/src/home/wheel.js';\n" +
           "import * as KIT from '/src/nutrition/kitchen.js';\n" +
+          "import * as BRAND from '/src/ui/brand.js';\n" +
           "import { MASTER_IMG_URLS } from '/src/assets/master/index.js';\n"
         ),
       });

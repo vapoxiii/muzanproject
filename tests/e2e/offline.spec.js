@@ -71,7 +71,7 @@ test('une nouvelle version publiée s’applique au démarrage suivant', async (
   const v1 = /const VERSION = "([^"]+)"/.exec(sw)[1];
   writeFileSync(join(dir, 'sw.js'), sw.replace(`const VERSION = "${v1}"`, `const VERSION = "${v1}-v2"`));
   writeFileSync(join(dir, 'index.html'), readFileSync(join(dir, 'index.html'), 'utf8')
-    .replace('<title>Mon suivi</title>', '<title>Mon suivi v2</title>').replace(`content="${v1}"`, `content="${v1}-v2"`));
+    .replace('<title>Grind</title>', '<title>Grind v2</title>').replace(`content="${v1}"`, `content="${v1}-v2"`));
   await page.evaluate(async () => { const r = await navigator.serviceWorker.getRegistration(); await r.update(); });
   await page.waitForFunction(async () => { const r = await navigator.serviceWorker.getRegistration(); return !!r.waiting; });
   // l'app ouverte propose la mise à jour
@@ -80,8 +80,8 @@ test('une nouvelle version publiée s’applique au démarrage suivant', async (
   // bascule tant que l'ancien service worker n'est pas arrêté ; l'app doit alors démarrer
   // normalement sur l'ancienne version et reproposer la mise à jour.)
   await page.reload();
-  await page.waitForFunction(() => document.title === 'Mon suivi v2' || !!document.querySelector('#updBanner:not([hidden])'), null, { timeout: 15000 });
-  if ((await page.title()) !== 'Mon suivi v2') {
+  await page.waitForFunction(() => document.title === 'Grind v2' || !!document.querySelector('#updBanner:not([hidden])'), null, { timeout: 15000 });
+  if ((await page.title()) !== 'Grind v2') {
     expect(await page.evaluate(() => !document.documentElement.classList.contains('boot'))).toBe(true);
     // le système finit par arrêter l'ancien service worker (app fermée, inactivité) : la nouvelle version s'applique
     const cdp = await context.newCDPSession(page);
@@ -91,8 +91,8 @@ test('une nouvelle version publiée s’applique au démarrage suivant', async (
     await expect.poll(() => [...versions.values()].some((v) => v.status === 'activated')).toBe(true);
     for (const v of [...versions.values()].filter((x) => x.status === 'activated')) await cdp.send('ServiceWorker.stopWorker', { versionId: v.versionId });
     // la bascule déclenche le rechargement de l'app (sinon on relance nous-mêmes)
-    const ok = await page.waitForFunction(() => document.title === 'Mon suivi v2', null, { timeout: 6000 }).then(() => true, () => false);
-    if (!ok) { await page.reload().catch(() => {}); await page.waitForFunction(() => document.title === 'Mon suivi v2', null, { timeout: 15000 }); }
+    const ok = await page.waitForFunction(() => document.title === 'Grind v2', null, { timeout: 6000 }).then(() => true, () => false);
+    if (!ok) { await page.reload().catch(() => {}); await page.waitForFunction(() => document.title === 'Grind v2', null, { timeout: 15000 }); }
   }
   srv.server.close();
   await context.close();

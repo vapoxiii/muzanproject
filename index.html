@@ -3,25 +3,37 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mon suivi</title>
+<title>Grind</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Suivi">
+<meta name="apple-mobile-web-app-title" content="Grind">
 <meta name="theme-color" content="#FCFBFE">
 <meta name="ms-version" content="__MS_VERSION__">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="icon" href="/icons/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
 <link rel="manifest" href="/manifest.webmanifest">
-<meta name="description" content="Suivi entraînement, nutrition, mesures et photos.">
-<style>html.boot body>*{visibility:hidden}html.boot body{background:#F6F4FB}</style>
+<meta name="description" content="Grind : entraînement, nutrition, mesures et photos, avec ton coach Ren.">
+<style>html.boot body>*:not(#splash){visibility:hidden}html.boot body{background:#F6F4FB}
+/* Écran de lancement GRIND : le cœur bat doucement pendant le démarrage, puis s'efface vers l'accueil (src/ui/brand.js) */
+.splash{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;pointer-events:none;background:radial-gradient(70% 42% at 50% 44%,rgba(196,168,255,.34),rgba(196,168,255,0) 70%),linear-gradient(180deg,#FCFBFE,#F1ECFA);transition:opacity .45s ease,visibility 0s linear .45s}
+.splash-in{display:flex;flex-direction:column;align-items:center;gap:18px;margin-top:-6vh;transition:transform .45s ease}
+.splash-h{width:132px;height:auto;filter:drop-shadow(0 12px 22px rgba(91,51,184,.22));animation:spBeat 1.3s ease-in-out infinite}
+.splash-w{width:112px;height:auto;opacity:0;animation:spIn .5s ease .15s forwards}
+.splash.out{opacity:0;visibility:hidden}.splash.out .splash-in{transform:scale(1.05)}
+@keyframes spBeat{0%,48%,100%{transform:scale(1)}12%{transform:scale(1.07)}24%{transform:scale(.99)}34%{transform:scale(1.04)}}
+@keyframes spIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.splash-h,.splash-w{animation:none;opacity:1}.splash,.splash-in{transition:none}}</style>
 <script>
 // iOS 26, web app sur l'écran d'accueil : la page s'arrête au-dessus d'une bande gardée par le système
 // (barre d'accueil comprise). Dans ce cas, pas de seconde marge en bas (html.pwa-short, voir app.css).
 (function(){var r=document.documentElement;function f(){var sa=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;var h=Math.max(screen.height,screen.width),w=Math.min(screen.height,screen.width),port=window.innerHeight>window.innerWidth;r.classList.toggle('pwa-short',!!(sa&&port&&h-window.innerHeight>30&&h/w>1.9));}f();addEventListener('orientationchange',function(){setTimeout(f,400)});})();
-setTimeout(function(){document.documentElement.classList.remove("boot")},6000)</script>
+setTimeout(function(){document.documentElement.classList.remove("boot");var s=document.getElementById("splash");if(s)s.classList.add("out")},6000)</script>
 </head>
 <body>
+<div id="splash" class="splash" aria-hidden="true"><div class="splash-in"><img class="splash-h" src="/src/assets/brand/grind-coeur.webp" alt="" width="132" height="107" fetchpriority="high"><img class="splash-w" src="/src/assets/brand/grind-texte.svg" alt="" width="112" height="25"></div></div>
 <div id="app">
   <section class="view" id="v-home" data-view="home" aria-label="Accueil">
     <img id="renFace" src="/src/assets/img/ren-l-portrait.webp" alt="" hidden>
@@ -47,7 +59,7 @@ setTimeout(function(){document.documentElement.classList.remove("boot")},6000)</
         <p class="hd-hint" id="hdHint">Touche Ren pour choisir où aller</p>
       </div>
       <div class="hd-low">
-        <p class="hd-date" id="hzDate"></p>
+        <div class="hd-low-top"><p class="hd-date" id="hzDate"></p><span class="brand hd-brand" role="img" aria-label="GRIND"><img class="brand-h" src="/src/assets/brand/grind-coeur.webp" alt=""><img class="brand-w" src="/src/assets/brand/grind-texte.svg" alt=""></span></div>
         <div class="td" role="group" aria-label="Aujourd’hui">
           <button type="button" class="td-b" id="goalB">
             <i class="td-ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7.5v9M17 7.5v9M4.5 10v4M19.5 10v4M7 12h10"/></svg></i>
@@ -326,6 +338,7 @@ setTimeout(function(){document.documentElement.classList.remove("boot")},6000)</
     <input type="file" id="bkFile" accept="application/json,.json" style="display:none">
     <p class="pf-hint" id="bkMsg" role="status"></p>
     <div class="foot" id="pfFoot">Tes coches sont sauvegardées automatiquement, en local sur ton téléphone.</div>
+    <div class="pf-brand"><span class="brand" role="img" aria-label="GRIND"><img class="brand-h" src="/src/assets/brand/grind-coeur.webp" alt=""><img class="brand-w" src="/src/assets/brand/grind-texte.svg" alt=""></span><span class="pf-ver" id="pfVer"></span></div>
   </section>
 </div>
 <nav class="mainnav" id="mainnav" aria-label="Navigation principale">

@@ -297,6 +297,7 @@ oqBuild = function () {
   O.innerHTML = '<div class="oq-stage" id="oqStage"><div class="oq-rig" id="oqRig"><div class="hd-bg"></div><div class="oq-glow" id="oqGlow"></div><div class="oq-lines" id="oqLines"></div>'
     + '<div class="oq-cw"><img class="oq-c" id="oqC0" alt="" aria-hidden="true"><img class="oq-c" id="oqC1" alt="" aria-hidden="true"></div><canvas class="oq-av" id="oqAv" aria-hidden="true"></canvas></div><div class="oq-shade"></div></div>'
     + '<div class="oq-hint" id="oqHint" aria-hidden="true">Fais glisser pour tourner autour de Ren</div>'
+    + '<div class="oq-brand" id="oqBrand" hidden>' + BRAND.brandMark({ size: 'm' }) + '</div>'
     + '<button type="button" class="oq-back" id="oqBack" aria-label="Question précédente"><svg width="11" height="18" viewBox="0 0 11 18" aria-hidden="true"><path d="M9 2 2 9l7 7" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'
     + '<div class="oq-prog" id="oqProg" aria-hidden="true">' + '<i><b></b></i>'.repeat(7) + '</div>'
     + '<div class="oq-bub" id="oqBub" role="status" aria-live="polite"><span class="oq-who" id="oqWho">Coach Ren</span><p class="oq-q" id="oqQ"></p><p class="oq-sub" id="oqSub"></p></div>'
@@ -366,6 +367,7 @@ const _oqRenderBase = oqRender;
 oqRender = function (full) {
   _oqRenderBase(full);
   const q = OQ[ONB.qi], opts = document.querySelector('#oqCtl .oq-opts');
+  const brand = document.getElementById('oqBrand'); if (brand) brand.hidden = q.type !== 'intro';   // logo : écran de bienvenue seulement
   if (opts && q.type === 'choice') { const n = opts.children.length; opts.classList.toggle('g2', n === 2 || n === 4); }
   if (full) {
     const el = document.getElementById('oqQ'), text = el.dataset.full || el.textContent;

@@ -1,7 +1,7 @@
 {
-  "name": "Mon suivi",
-  "short_name": "Suivi",
-  "description": "Suivi entraînement, nutrition, mesures et photos.",
+  "name": "Grind",
+  "short_name": "Grind",
+  "description": "Grind : entraînement, nutrition, mesures et photos, avec ton coach Ren.",
   "lang": "fr",
   "dir": "ltr",
   "start_url": "./",

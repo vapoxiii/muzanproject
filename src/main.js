@@ -24,6 +24,8 @@ import { clearRemoteChanged, sync } from './core/sync.js';
 import { auth } from './core/auth.js';
 import { MS } from './core/bridge.js';
 import { mountCloudUI, showUpdateBanner, showFatal } from './ui/account.js';
+import { splashOut } from './ui/brand.js';
+import { APP_VERSION } from './core/config.js';
 
 const root = document.documentElement;
 // Aperçu de test publié dans Claude (npm run apercu) : pas de service worker, données d'exemple
@@ -53,7 +55,10 @@ async function boot() {
     return;
   } finally {
     root.classList.remove('boot');
+    splashOut();
   }
+  const ver = document.getElementById('pfVer');
+  if (ver) ver.textContent = 'Version ' + APP_VERSION;
   // les données reçues avant le démarrage sont déjà affichées : pas de bandeau « actualiser »
   if (pulledBeforeStart) clearRemoteChanged();
 
@@ -63,4 +68,4 @@ async function boot() {
   else registerSW(showUpdateBanner);
 }
 
-boot().catch((e) => { console.error(e); root.classList.remove('boot'); showFatal(e); });
+boot().catch((e) => { console.error(e); root.classList.remove('boot'); splashOut(); showFatal(e); });

@@ -224,7 +224,7 @@
   @keyframes heroIn{from{opacity:0; transform:scale(1.03)} to{opacity:1; transform:none}}
   @keyframes upIn{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
 
-  @media (max-height:700px){ .hd{--low:calc(262px + var(--sab))} .hd-date{display:none} .td-b{min-height:92px} .hd-say{margin-top:16px} .hd-say-t{font-size:17px} }
+  @media (max-height:700px){ .hd{--low:calc(262px + var(--sab))} .hd-date,.hd-low-top{display:none} .td-b{min-height:92px} .hd-say{margin-top:16px} .hd-say-t{font-size:17px} }
 
   /* ---------- Entrée d'une partie : Ren, sa phrase, les rubriques en tuiles ---------- */
   /* Plein écran sans défilement, comme l'accueil ; les tuiles en bas, au-dessus de la maison. Une
@@ -897,7 +897,8 @@
   .ai-scan-n{font-size:12.5px; font-weight:700; color:var(--txt)}
   .ai-scan-m{margin-top:2px; font-size:12px; font-weight:500; color:var(--muted); font-variant-numeric:tabular-nums}
   .spin{display:flex; align-items:center; justify-content:center; gap:10px; padding:26px; color:var(--muted); font-weight:600; font-size:13.5px}
-  .spin i{width:16px; height:16px; border:2.5px solid #322C3F; border-top-color:var(--hot1); border-radius:50%; animation:sp .8s linear infinite; display:block}
+  /* attente : le cœur GRIND bat (analyse IA, synchronisation) */
+  .spin i{width:26px; height:21px; background:url('../assets/brand/grind-coeur.webp') center/contain no-repeat; animation:brandBeat 1.2s ease-in-out infinite; display:block; flex:none}
   @keyframes sp{to{transform:rotate(360deg)}}
   .err{margin-bottom:10px; padding:12px; border-radius:12px; background:rgba(255,94,91,.1); color:#FF8A87; font-size:13px; font-weight:600}
   .savetpl{display:flex; align-items:center; gap:9px; margin:2px 0 12px; font-size:13px; font-weight:600; color:var(--muted); cursor:pointer}
@@ -1294,3 +1295,33 @@
   .oq-mhair button[aria-pressed="true"]{border-color:var(--hot1); background:rgba(146,92,255,.2)}
   .oq-mhair canvas{display:block; width:100%; height:auto; aspect-ratio:1; margin-bottom:4px}
   .oq-soon{display:block; margin-top:2px; font-size:10.5px; font-weight:700; color:rgba(38,24,82,0.5)}
+
+  /* ===== Logo GRIND (src/ui/brand.js ; règles d'usage : brand/README.md) =====
+     --bh = hauteur de l'image du cœur. Le texte fait 40 % de la hauteur visible du cœur,
+     l'espace entre les deux 16 % : les proportions du logo principal du kit. */
+  .brand{--bh:22px; display:inline-flex; align-items:center; gap:calc(var(--bh) * .1); line-height:0; vertical-align:middle; flex:none}
+  .brand-h{display:block; height:var(--bh); width:auto}
+  .brand-w{display:block; height:calc(var(--bh) * .363); width:auto; margin-top:calc(var(--bh) * .054)}
+  .brand-s{--bh:20px} .brand-m{--bh:32px} .brand-l{--bh:46px}
+  @keyframes brandBeat{0%,48%,100%{transform:scale(1)} 12%{transform:scale(1.12)} 24%{transform:scale(.97)} 34%{transform:scale(1.07)}}
+  @media (prefers-reduced-motion:reduce){ .spin i{animation:none} }
+
+  /* accueil : discret, à droite de la date */
+  .hd-low-top{display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:22px; margin:-6px 0 -4px}
+  .hd-low-top .hd-date{margin:0 0 0 2px}
+  .hd-brand{--bh:22px; margin-right:-2px}
+
+  /* profil : signature en bas de page, avec la version */
+  .pf-brand{display:flex; flex-direction:column; align-items:center; gap:6px; margin:26px 0 6px}
+  .pf-brand .brand{--bh:28px}
+  .pf-ver{font-size:11.5px; font-weight:600; letter-spacing:.02em; color:var(--muted2)}
+
+  /* onboarding : premier écran (bienvenue, Ren se présente) */
+  .oq-brand{position:absolute; z-index:4; left:18px; top:calc(env(safe-area-inset-top) + 20px); animation:upIn .5s var(--ease) .1s both}
+  .oq-brand[hidden]{display:none}
+  .oq-brand .brand{--bh:34px}
+
+  /* connexion et inscription */
+  .acc-brand{display:flex; justify-content:center; margin:4px 0 16px}
+  .acc-brand .brand{--bh:46px}
+
