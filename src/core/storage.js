@@ -25,7 +25,7 @@ const NOT_APP = /^(sb-|ms-auth|__)/;
 // Clés partagées entre appareils. Le reste (clé IA perso, brouillon d'onboarding,
 // clés inconnues d'autres pages du même site) reste sur ce téléphone.
 const SYNC_EXACT = new Set(['bodylog', 'foodlib', 'foodlog', 'dayact', 'calbase', 'profile', 'avatar:config',
-  'avatar:inv', 'coach', 'coach:event', 'ui:hero', 'onb:done', 'cloud:photos', 'program', 'calcheck']);
+  'avatar:inv', 'coach', 'coach:event', 'ui:hero', 'onb:done', 'cloud:photos', 'program', 'calcheck', 'recettes']);
 export function isSyncable(k) { return k.startsWith('fitweek:') || SYNC_EXACT.has(k); }
 export function isAppKey(k) { return !NOT_APP.test(k); }
 

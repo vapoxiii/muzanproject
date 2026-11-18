@@ -172,6 +172,14 @@ L’ancien `localStorage` n’est pas effacé : revenir à l’ancienne version 
   *Mesures* (poids, tour de taille) et *Photos*. Une catégorie à la fois, au toucher ou aux flèches du
   clavier ; les raccourcis de l’accueil (rang, séance du jour, calories) ouvrent directement la bonne.
   Un aliment s’ajoute depuis une fenêtre du bas (recherche, création, gestion de la liste).
+- **Livre de recettes** (Nutrition, les ustensiles de la cuisine, ou la balance) : on écrit une recette une
+  fois — ses ingrédients pris dans *Mes aliments*, scannés ou créés, en grammes, millilitres ou portions,
+  le nombre de parts, la préparation si on veut — et l’app calcule une part. Quand on la refait, *+* dans
+  le livre (ou la puce de la recette sous la balance) note une part dans la journée ; la page de la
+  recette permet d’en noter une demie, une et demie… Chaque recette a son aliment « 1 part » dans
+  *Mes aliments* (recherche, aliments fréquents) ; la modifier ou la supprimer ne change pas les jours
+  déjà notés (l’ancienne version reste pour l’historique). Clé `recettes`, synchronisée ; calculs dans
+  `src/nutrition/recettes.js`, écrans dans `src/legacy/20-recettes.js`.
 - **Poids** (Corps → Mesures) : la courbe suit la tendance lissée (les pesées sont des points) ;
   au-dessus, la tendance du jour et la vitesse sur 3 semaines. Plus on se pèse (3 à 4 fois par semaine),
   plus elle est fiable.

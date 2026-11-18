@@ -80,3 +80,49 @@ test('scanner : code lu, valeurs pour 100 g avec glucides et lipides, ajout pour
   expect(errors).toEqual([]);
   await context.close();
 });
+
+test('scanner dans une recette : le produit rejoint la recette avec sa quantité, au-dessus de la recette', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, permissions: ['camera'] });
+  await offlineThirdParties(context, srv.url);
+  await context.route('https://world.openfoodfacts.org/**', (r) => r.fulfill({ contentType: 'application/json', body: JSON.stringify({ status: 1, product: {
+    code: CODE, product_name: 'Pâte à tartiner', brands: 'Marque', serving_quantity: '15',
+    nutriments: { 'energy-kcal_100g': 539, proteins_100g: 6.3, carbohydrates_100g: 57.5, fat_100g: 30.9 },
+  } }) }));
+  await seedLocalStorage(context, buildData());
+  const page = await context.newPage();
+  await page.clock.setFixedTime(FIXED_NOW);
+  const errors = collectErrors(page);
+  await page.goto(srv.url + '/index.html');
+  await settle(page, 1200);
+  await showView(page, 'nutrition');
+  await page.locator('#kzBook').click();
+  await page.locator('.rc-book [data-act="new"]').first().click();
+  const ed = page.locator('.rc-ed');
+  await ed.locator('.rc-name input').fill('Crêpes');
+  await ed.locator('[data-act="add"]').click();
+  await page.locator('.rc-pk [data-act="scan"]').click();
+  await expect(page.locator('#scanner')).toHaveClass(/rc-top/);
+  await expect(page.locator('.sr-name')).toHaveText('Pâte à tartiner', { timeout: 20000 });
+  await expect(page.locator('#scanAdd')).toHaveText('Ajouter à la recette');
+  await page.fill('#scanqty', '40');
+  await page.click('#scanAdd');                      // (cliquable : le scanner est bien au-dessus de la recette)
+  await expect(page.locator('#scanner')).toBeHidden();
+  const row = ed.locator('.rc-ing');
+  await expect(row).toHaveCount(1);
+  await expect(row.locator('.rc-ing-t b')).toHaveText('Pâte à tartiner');
+  await expect(row.locator('input')).toHaveValue('40');
+  await expect(row.locator('.rc-ing-t span')).toHaveText('216 kcal · P 3 · G 23 · L 12');
+  await ed.locator('[data-act="save"]').click();
+  await expect(ed).toHaveCount(0);
+  const kv = (await readIDB(page)).kv;
+  const lib = JSON.parse(kv.find((r) => r.k === 'foodlib').v);
+  expect(lib.find((f) => f.bc === CODE && f.u === '100 g')).toMatchObject({ n: 'Pâte à tartiner', k: 539, p: 6.3, g: 57.5, l: 30.9 });
+  expect(JSON.parse(kv.find((r) => r.k === 'recettes').v)[0].items[0]).toMatchObject({ n: 'Pâte à tartiner', u: '100 g', q: 0.4 });
+  // ensuite, le scanner de la journée redevient celui d'avant
+  await page.locator('.rc-book [data-act="close"]').first().click();
+  await page.locator('#nutHub .ph-tile[data-act="scan"]').click();
+  await expect(page.locator('#scanner')).not.toHaveClass(/rc-top/);
+  await expect(page.locator('#scanAdd')).toHaveText('Ajouter à ma journée', { timeout: 20000 });
+  expect(errors).toEqual([]);
+  await context.close();
+});

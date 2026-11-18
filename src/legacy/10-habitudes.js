@@ -1,9 +1,11 @@
 // ---- Barre « mes habitudes » : repas les plus utilisés, 1 tap ----
 function topFoods(){
-  const count={}; Object.keys(foodlog).forEach(d=>(foodlog[d]||[]).forEach(e=>{ count[e.fid]=(count[e.fid]||0)+e.q; }));
+  // une ancienne version d'une recette compte pour sa version actuelle (recettes : 20-recettes.js)
+  const cur=id=>{ const f=foodById(id); if(!f)return null; if(!f.old)return id; const n=f.rec&&foodlib.find(x=>x.rec===f.rec&&!x.old); return n?n.id:null; };
+  const count={}; Object.keys(foodlog).forEach(d=>(foodlog[d]||[]).forEach(e=>{ const id=cur(e.fid); if(id)count[id]=(count[id]||0)+e.q; }));
   const ids=Object.keys(count).sort((a,b)=>count[b]-count[a]);
   const favs=foodlib.filter(f=>f.fav).map(f=>f.id);
-  const merged=[...new Set([...ids,...favs])].map(id=>foodById(id)).filter(Boolean);
+  const merged=[...new Set([...ids,...favs])].map(id=>foodById(id)).filter(f=>f&&!f.old);
   return merged.slice(0,10);
 }
 function renderQuick(){

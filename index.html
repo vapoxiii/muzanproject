@@ -122,13 +122,15 @@ setTimeout(function(){document.documentElement.classList.remove("boot");var s=do
          seule, avec un retour vers l'entrée (11-accueil.js : openSub, setHub). -->
     <div class="ph kz-on" id="nutHub" data-ambiance="jour" data-moment="jour">
       <!-- La cuisine : son ambiance suit le soleil (jour, coucher de soleil, nuit ; src/nutrition/kitchen.js).
-           On touche la balance pour noter ce qu'on a mangé ; elle affiche les calories du jour. -->
+           On touche la balance pour noter ce qu'on a mangé ; elle affiche les calories du jour. Les bocaux
+           ouvrent Mes aliments, les ustensiles le livre de recettes (20-recettes.js). -->
       <div class="kz" id="kz">
         <img class="kz-img" id="kzImg" src="/src/assets/img/cuisine/cuisine-jour.webp" alt="" decoding="async">
         <i class="kz-lcd" aria-hidden="true"></i>
         <p class="kz-val" id="kzVal" aria-hidden="true"><b class="num">0</b><small>kcal</small></p>
         <button type="button" class="kz-hot kz-scale" id="kzScale" aria-label="La balance : ajouter ce que tu as mangé"><span class="kz-ring" aria-hidden="true"></span><span class="kz-chip"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Ajouter un repas</span></button>
         <button type="button" class="kz-hot kz-jars" id="kzJars" aria-label="Mes aliments"><span class="kz-chip sm">Mes aliments</span></button>
+        <button type="button" class="kz-hot kz-book" id="kzBook" aria-label="Mes recettes"><span class="kz-chip sm">Mes recettes</span></button>
       </div>
       <div class="kz-scrim" aria-hidden="true"></div>
       <div class="ph-ui">

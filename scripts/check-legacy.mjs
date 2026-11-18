@@ -8,7 +8,7 @@ import globals from 'globals';
 
 const dir = new URL('../src/legacy/', import.meta.url).pathname;
 const files = readdirSync(dir).filter((f) => /^\d\d-.*\.js$/.test(f)).sort();
-const header = "import { sget, sset, sdel, skeys } from '/src/core/storage.js';\nimport { MS } from '/src/core/bridge.js';\nimport * as TR from '/src/training/index.js';\nimport * as TRUI from '/src/training/ui/index.js';\nimport * as TB from '/src/body/trend.js';\nimport * as HOME from '/src/home/wheel.js';\nimport * as KIT from '/src/nutrition/kitchen.js';\nimport * as BRAND from '/src/ui/brand.js';\nimport { MASTER_IMG_URLS } from '/src/assets/master/index.js';\n";
+const header = "import { sget, sset, sdel, skeys } from '/src/core/storage.js';\nimport { MS } from '/src/core/bridge.js';\nimport * as TR from '/src/training/index.js';\nimport * as TRUI from '/src/training/ui/index.js';\nimport * as TB from '/src/body/trend.js';\nimport * as HOME from '/src/home/wheel.js';\nimport * as KIT from '/src/nutrition/kitchen.js';\nimport * as BRAND from '/src/ui/brand.js';\nimport * as RCP from '/src/nutrition/recettes.js';\nimport { MASTER_IMG_URLS } from '/src/assets/master/index.js';\n";
 const parts = files.map((f) => ({ f, src: readFileSync(join(dir, f), 'utf8') }));
 const code = header + parts.map((p) => p.src).join('');
 // table ligne → fichier

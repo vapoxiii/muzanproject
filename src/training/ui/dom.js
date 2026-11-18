@@ -33,8 +33,9 @@ export const ICON = {
 const stack = [];
 function lock(on) { document.documentElement.classList.toggle('tr-lock', on); }
 
-// Ouvre `node` par-dessus l'app. Renvoie close(). Échap et clic sur le fond (feuilles) ferment.
-export function openLayer(node, { sheet = true, onClose = null, label = '' } = {}) {
+// Ouvre `node` par-dessus l'app. Renvoie close(). Échap et clic sur le fond (feuilles) ferment ;
+// avec guard, ils appellent guard() à la place (qui peut demander avant de fermer).
+export function openLayer(node, { sheet = true, onClose = null, label = '', guard = null } = {}) {
   const back = document.createElement('div');
   back.className = sheet ? 'modal tr-modal' : 'tr-full';
   back.setAttribute('role', 'dialog');
@@ -54,9 +55,9 @@ export function openLayer(node, { sheet = true, onClose = null, label = '' } = {
     if (prevFocus && prevFocus.focus && document.contains(prevFocus)) { try { prevFocus.focus({ preventScroll: true }); } catch (e) { /* rien */ } }
     if (onClose) onClose();
   };
-  const entry = { back, close };
+  const entry = { back, close, guard };
   if (sheet) back.addEventListener('pointerdown', (e) => { if (e.target === back) back._down = true; });
-  if (sheet) back.addEventListener('click', (e) => { if (e.target === back && back._down) close(); back._down = false; });
+  if (sheet) back.addEventListener('click', (e) => { if (e.target === back && back._down) (guard || close)(); back._down = false; });
   stack.push(entry);
   lock(true);
   document.body.appendChild(back);
@@ -73,7 +74,8 @@ if (typeof document !== 'undefined') {
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape' || !stack.length) return;
     e.stopPropagation();
-    stack[stack.length - 1].close();
+    const t = stack[stack.length - 1];
+    (t.guard || t.close)();
   }, true);
 }
 

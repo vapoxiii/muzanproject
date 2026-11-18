@@ -19,7 +19,8 @@ const _rnhKZ = renderNutritionHub;
 renderNutritionHub = function () { _rnhKZ(); try { renderKitchen(); } catch (e) { console.error(e); } };
 document.addEventListener('visibilitychange', () => { if (!document.hidden) try { renderKitchen(); } catch (e) {} });
 
-// La balance : « Qu'as-tu mangé ? » — photo, code-barres, recherche, description ; puis les repas du jour
+// La balance : « Qu'as-tu mangé ? » — photo, code-barres, recherche, description ; tes recettes (une
+// part en un geste, le livre : 20-recettes.js) ; puis les repas du jour
 function kitchenScaleSheet() {
   goToday();
   const tt = todayTotals(), tg = todayTarget(), left = tg.t - tt.k, n = (foodlog[todayStr()] || []).length;
@@ -34,15 +35,18 @@ function kitchenScaleSheet() {
       '<button type="button" data-k="add"><i>' + svg('add') + '</i><span><b>Chercher</b><small>Tes aliments</small></span></button>' +
       '<button type="button" data-k="ai"><i>' + ai + '</i><span><b>Décrire</b><small>En quelques mots</small></span></button>' +
     '</div>' +
+    recScaleHtml() +
     '<button type="button" class="kz-meals" data-k="meals">Mes repas du jour<span>' + (n ? n + ' noté' + (n > 1 ? 's' : '') : 'aucun encore') + '</span><svg width="8" height="13" viewBox="0 0 8 13" aria-hidden="true"><path d="M1.5 1.5 6.5 6.5l-5 5" stroke="currentColor" stroke-width="1.7" fill="none"/></svg></button>';
   const close = TRUI.openLayer(node, { label: 'La balance : ajouter ce que tu as mangé' });
   node.addEventListener('click', (e) => {
-    const b = e.target.closest('[data-k]'); if (!b) return;
+    const b = e.target.closest('[data-k],[data-rc]'); if (!b) return;
     const k = b.dataset.k; close();
-    if (k === 'photo') aiPhotoPick();
+    if (b.dataset.rc) recLogById(b.dataset.rc, 1);
+    else if (k === 'photo') aiPhotoPick();
     else if (k === 'scan') scanOpen('meal');
     else if (k === 'add') openPicker();
     else if (k === 'ai') document.getElementById('aibtn').click();
+    else if (k === 'book') openRecipeBook();
     else if (k === 'meals') openSub('nutrition', 'repas', true);
   });
 }

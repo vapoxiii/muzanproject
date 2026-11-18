@@ -281,6 +281,10 @@
   .kz-hot{position:absolute; padding:0; border:0; background:none; cursor:pointer; -webkit-tap-highlight-color:transparent}
   .kz-scale{left:24.5%; top:50.6%; width:39%; height:9.8%}
   .kz-jars{left:36%; top:38.6%; width:14.5%; height:6.6%}
+  /* les ustensiles : le livre de recettes ; l'étiquette part du pot vers la droite, à côté de celle des bocaux */
+  .kz-book{left:56.4%; top:38.6%; width:6.4%; height:6.2%}
+  .kz-book .kz-chip{left:0; transform:translateY(6px)}
+  .kz-book:active .kz-chip{transform:translateY(6px) scale(.95)}
   .kz-ring{position:absolute; left:-4%; right:-4%; top:-10%; bottom:-14%; border-radius:50%; box-shadow:0 0 0 2px rgba(255,255,255,.95), 0 0 22px rgba(160,120,255,.55); animation:kzPulse 2.8s ease-out infinite; pointer-events:none}
   @keyframes kzPulse{0%{opacity:.95; transform:scale(.86)} 70%{opacity:0; transform:scale(1.12)} 100%{opacity:0; transform:scale(1.12)}}
   .kz-chip{position:absolute; left:50%; bottom:100%; display:inline-flex; align-items:center; gap:6px; margin-bottom:8px; padding:7px 13px 7px 11px; border-radius:999px; background:rgba(255,255,255,.94); box-shadow:0 8px 20px rgba(70,46,150,.18); color:var(--hot1); font-size:12.5px; font-weight:700; line-height:1; white-space:nowrap; transform:translateX(-50%) translateY(6px); transition:transform .14s var(--ease)}
@@ -351,9 +355,17 @@
   .kz-acts .main{grid-column:1 / -1; flex-direction:row; align-items:center; gap:12px; background:linear-gradient(180deg,#8A5CF0,#6B3FDC); box-shadow:0 10px 22px rgba(107,63,220,.28)}
   .kz-acts .main > i{background:rgba(255,255,255,.2); color:#fff}
   .kz-acts .main b{color:#fff} .kz-acts .main small{color:rgba(255,255,255,.84)}
-  .kz-meals{display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; min-height:50px; margin-top:12px; padding:0 14px; border:0; border-radius:14px; background:none; box-shadow:inset 0 0 0 1px var(--line2); color:var(--head); font-size:14px; font-weight:650; cursor:pointer}
-  .kz-meals span{margin-left:auto; font-weight:500; color:var(--muted)}
-  .kz-meals svg{color:var(--muted)}
+  .kz-meals,.kz-rcrow{display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; min-height:50px; margin-top:12px; padding:0 14px; border:0; border-radius:14px; background:none; box-shadow:inset 0 0 0 1px var(--line2); color:var(--head); font-size:14px; font-weight:650; cursor:pointer}
+  .kz-meals span,.kz-rcrow span{margin-left:auto; font-weight:500; color:var(--muted)}
+  .kz-meals svg,.kz-rcrow svg{color:var(--muted)}
+  .kz-rc{margin-top:16px}
+  .kz-rc-t{margin:0 0 8px; font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)}
+  .kz-rc-l{display:flex; gap:8px; margin:0 -18px; padding:0 18px 2px; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch}
+  .kz-rc-l::-webkit-scrollbar{display:none}
+  .kz-rc-l .qchip{background:var(--tint); color:var(--head)}
+  .kz-rc .kz-rcrow{margin-top:0}
+  .kz-rc .kz-rc-l + .kz-rcrow{margin-top:10px}
+  .kz-rc + .kz-meals{margin-top:8px}
   @media (max-height:700px){ #nutHub.kz-on .ph-say{margin-top:8px} #nutHub.kz-on .ph-say-t{font-size:15px} #nutHub.kz-on .ph-tile{min-height:78px} }
   @media (prefers-reduced-motion:reduce){ .kz-ring{animation:none} }
 
@@ -1325,3 +1337,76 @@
   .acc-brand{display:flex; justify-content:center; margin:4px 0 16px}
   .acc-brand .brand{--bh:46px}
 
+
+  /* livre de recettes (Nutrition : les ustensiles de la cuisine, la balance ; 20-recettes.js) */
+  .foodresults .fr-rc{display:inline-block; margin-right:3px; padding:1px 6px; border-radius:6px; background:var(--tint); color:var(--hot1); font-size:11px; font-weight:700; letter-spacing:.02em}
+  .scanner.rc-top{z-index:94}
+  .rc-book .pk-q{margin:2px 0 14px}
+  .rc-list{margin-top:4px}
+  .rc-card{display:flex; align-items:center; gap:12px; min-height:68px}
+  .rc-open{flex:1; min-width:0; display:block; padding:13px 0; border:0; background:none; color:var(--txt); text-align:left; cursor:pointer}
+  .rc-open b{display:block; font-size:16px; font-weight:650; line-height:1.3; letter-spacing:-.01em; color:var(--head)}
+  .rc-open span{display:block; margin-top:3px; font-size:13px; font-weight:500; line-height:1.4; color:var(--muted)}
+  .rc-log{flex:0 0 auto; display:grid; place-items:center; width:42px; height:42px; margin-right:-4px; border:0; border-radius:50%; background:var(--tint); color:var(--hot1); cursor:pointer; transition:background .18s ease, color .18s ease, transform .14s var(--ease)}
+  .rc-log svg{width:15px; height:15px}
+  .rc-log:active{transform:scale(.9)}
+  .rc-log.done{background:var(--hot1); color:#fff}
+  .rc-empty{margin-top:6px; padding:22px 18px 18px; border-radius:var(--r-grp); background:var(--surf); box-shadow:var(--hl)}
+  .rc-empty-t{margin:0; font-size:17px; font-weight:700; line-height:1.3; color:var(--head)}
+  .rc-empty-p{margin:6px 0 0; font-size:14px; font-weight:500; line-height:1.5; color:var(--muted)}
+  .rc-sheet .sheeth .st{min-width:0; overflow-wrap:anywhere}
+  .rc-sh-s{margin:-6px 0 0; font-size:14px; font-weight:500; color:var(--muted)}
+  .rc-sh-s b{font-weight:700; color:var(--head)}
+  .rc-sh-m{margin:3px 0 0; font-size:13px; font-weight:500; color:var(--muted); font-variant-numeric:tabular-nums}
+  .rc-sheet .pe-lab{margin-top:18px}
+  .rc-ings{margin:6px 0 0; padding:0; list-style:none}
+  .rc-ings li{display:flex; align-items:baseline; justify-content:space-between; gap:14px; padding:10px 0; border-bottom:1px solid var(--line); font-size:14.5px; font-weight:500; line-height:1.35}
+  .rc-ings li span{min-width:0}
+  .rc-ings li b{flex:0 0 auto; font-weight:650; color:var(--head); font-variant-numeric:tabular-nums}
+  .rc-prep{margin:8px 0 0; font-size:14.5px; font-weight:500; line-height:1.55; overflow-wrap:anywhere}
+  .rc-eat{display:flex; align-items:center; gap:10px; margin-top:22px}
+  .rc-eat .qty{flex:0 0 auto; height:48px}
+  .rc-eat .qty button{width:40px; height:48px; font-size:19px}
+  .rc-eat .qty span{min-width:62px}
+  .rc-eat-go{flex:1; min-width:0}
+  .rc-edit{margin-top:10px}
+  .rc-ed .pe-body{padding-bottom:calc(72px + var(--sab))}
+  .rc-name{margin-top:2px}
+  .rc-parts{display:flex; align-items:center; justify-content:space-between; gap:14px; margin-top:20px}
+  .rc-parts > div:first-child{min-width:0}
+  .rc-parts-k{margin:0; font-size:15px; font-weight:650; color:var(--head)}
+  .rc-parts .pe-note{margin-top:2px}
+  .rc-parts .qty{flex:0 0 auto; height:44px}
+  .rc-parts .qty button{width:40px; height:44px; font-size:20px}
+  .rc-parts .qty span{min-width:28px; font-size:17px}
+  .rc-opt{font-weight:500; color:var(--muted2)}
+  .rc-ings-ed{margin-top:8px; padding:0 10px 0 16px; border-radius:var(--r-grp); background:var(--surf); box-shadow:var(--hl)}
+  .rc-ings-ed > * + *{border-top:1px solid var(--line)}
+  .rc-none{margin:0; padding:16px 0; font-size:14px; font-weight:500; color:var(--muted)}
+  .rc-ing{display:flex; align-items:center; gap:8px; min-height:64px; padding:8px 0}
+  .rc-ing-t{flex:1; min-width:0}
+  .rc-ing-t b{display:block; font-size:15px; font-weight:600; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .rc-ing-t span{display:block; margin-top:2px; font-size:12px; font-weight:500; color:var(--muted2); font-variant-numeric:tabular-nums; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .rc-qi{flex:0 1 auto; display:flex; align-items:center; gap:3px; min-width:0; max-width:48%; height:40px; padding:0 10px 0 2px; border-radius:12px; background:var(--surf2); cursor:text}
+  .rc-qi:focus-within{box-shadow:inset 0 0 0 1.5px var(--hot1)}
+  .rc-qi input{flex:0 0 auto; width:56px; height:100%; padding:0 2px 0 6px; border:0; background:none; color:var(--txt); font-size:16px; font-weight:650; text-align:right; outline:none; font-variant-numeric:tabular-nums}
+  .rc-qi.n input{width:34px}
+  .rc-qi span{min-width:0; font-size:12.5px; font-weight:600; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .rc-x{flex:0 0 auto; display:grid; place-items:center; width:34px; height:34px; padding:0; border:0; border-radius:50%; background:none; color:var(--muted2); cursor:pointer}
+  .rc-x svg{width:13px; height:13px}
+  .rc-tot{margin-top:18px}
+  .rc-tot-c{padding:16px 18px 15px; border-radius:var(--r-grp); background:linear-gradient(180deg,#8A5CF0,#6B3FDC); color:#fff; box-shadow:0 10px 22px rgba(107,63,220,.28)}
+  .rc-tot-k{margin:0; font-size:11.5px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:rgba(255,255,255,.82)}
+  .rc-tot-v{margin:3px 0 0; font-size:15px; font-weight:600}
+  .rc-tot-v b{font-family:var(--display); font-size:30px; font-weight:800; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+  .rc-tot-m{margin:1px 0 0; font-size:13px; font-weight:500; color:rgba(255,255,255,.88); font-variant-numeric:tabular-nums}
+  .rc-tot-all{margin:10px 2px 0; font-size:13px; font-weight:500; color:var(--muted); font-variant-numeric:tabular-nums}
+  .rc-warn{margin:8px 2px 0; font-size:12.5px; font-weight:500; line-height:1.45; color:#8a5410}
+  .rc-ed textarea{display:block; width:100%; min-height:110px; margin-top:8px; padding:12px 14px; border:1.5px solid transparent; border-radius:14px; background:var(--surf2); color:var(--txt); font:inherit; font-size:16px; font-weight:500; line-height:1.45; resize:vertical}
+  .rc-ed textarea:focus{outline:none; border-color:var(--hot1)}
+  .rc-pk-acts{display:flex; gap:8px; margin-top:10px}
+  .rc-pk-acts .tr-btn{flex:1; min-width:0; min-height:40px; gap:6px}
+  .rc-pk-acts .tr-btn span{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .rc-pk-acts .tr-btn svg{flex:0 0 auto; color:var(--hot1)}
+  .rc-new .nf4{margin-top:6px}
+  .rc-new .nf4 input[type="text"]{margin-top:0; padding:0 6px; text-align:center}

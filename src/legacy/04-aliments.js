@@ -70,10 +70,13 @@ function renderMeals(){
 function renderPicker(q){
   const box=document.getElementById('foodresults'); if(!box)return; box.innerHTML='';
   const query=(q||'').toLowerCase().trim();
-  const list=foodlib.filter(f=>!query||f.n.toLowerCase().includes(query)).slice(0,40);
+  // (anciennes versions d'une recette : gardées pour l'historique, plus proposées ; les recettes d'abord)
+  let list=foodlib.filter(f=>!f.old&&(!query||f.n.toLowerCase().includes(query)));
+  if(!query)list=list.filter(f=>f.rec).concat(list.filter(f=>!f.rec));
+  list=list.slice(0,40);
   if(!list.length){ box.innerHTML='<div class="none">Aucun résultat. Crée-le ci-dessous.</div>'; return; }
   list.forEach(f=>{ const r=document.createElement('button'); r.type='button'; r.className='fr';
-    r.innerHTML=`<span class="frn">${esc(f.n)}<small>${esc(f.u)} · ${macLine(f,1)}</small></span><span class="frk">${f.k} kcal</span><span class="add" aria-hidden="true"></span>`;
+    r.innerHTML=`<span class="frn">${esc(f.n)}<small>${f.rec?'<b class="fr-rc">Recette</b> ':''}${esc(f.u)} · ${macLine(f,1)}</small></span><span class="frk">${f.k} kcal</span><span class="add" aria-hidden="true"></span>`;
     r.setAttribute('aria-label','Ajouter '+f.n+', '+f.k+' kcal');
     r.onclick=()=>{ logFood(f.id); r.classList.remove('added'); void r.offsetWidth; r.classList.add('added'); };
     box.appendChild(r); });
@@ -92,7 +95,8 @@ function closePicker(){
 }
 function renderManage(){
   const box=document.getElementById('managelist'); if(!box||box.hidden)return; box.innerHTML='';
-  foodlib.forEach(f=>{ const r=document.createElement('div'); r.className='mgr';
+  // (les recettes se gèrent dans Mes recettes : leur aliment « 1 part » suit leurs ingrédients)
+  foodlib.filter(f=>!f.rec).forEach(f=>{ const r=document.createElement('div'); r.className='mgr';
     r.innerHTML=`<div class="mgn">${esc(f.n)}<small>${f.k} kcal · ${macLine(f,1)} · ${esc(f.u)}</small></div>`;
     const ed=document.createElement('button'); ed.className='mgb'; ed.textContent='✎'; ed.setAttribute('aria-label','Modifier'); ed.onclick=()=>startEdit(f.id);
     const dl=document.createElement('button'); dl.className='mgb'; dl.textContent='✕'; dl.setAttribute('aria-label','Supprimer'); dl.onclick=()=>{ foodlib=foodlib.filter(x=>x.id!==f.id); saveFoodlib(); renderMeals(); const fs=document.getElementById('foodsearch'); renderPicker(fs?fs.value:''); };
