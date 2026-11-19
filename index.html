@@ -304,6 +304,26 @@ setTimeout(function(){document.documentElement.classList.remove("boot");var s=do
     <p class="pf-hint" id="spHint">Touche un sport pour ses jours, sa durée et son intensité. Ses calories s’ajoutent à ton objectif du jour quand tu le coches dans Activité du jour, en Nutrition.</p>
   </section>
 
+  <section class="view" id="v-social" data-view="social" aria-label="Social" hidden>
+    <!-- Le social (21-social.js) : stories de 24 h en haut, puis messages et amis. Sans compte ou sans
+         profil social, une carte explique et propose de le créer. -->
+    <header class="vh so-head"><div class="vh-tx"><h1 class="vh-t" tabindex="-1">Social</h1><p class="vh-s" id="soSub">Tes amis et leurs stories</p></div><button type="button" class="so-me" id="soMe" hidden aria-label="Mon profil social"></button></header>
+    <div id="soGate"></div>
+    <div id="soMain" hidden>
+      <div class="so-stories" id="soStories" aria-label="Stories de 24 heures"></div>
+      <div class="sub" role="tablist" aria-label="Messages et amis" data-sub="social">
+        <button type="button" role="tab" id="so-t-msg" data-p="messages" aria-controls="so-p-msg" aria-selected="true">Messages<em class="so-n" id="soNMsg" hidden></em></button>
+        <button type="button" role="tab" id="so-t-amis" data-p="amis" aria-controls="so-p-amis" aria-selected="false" tabindex="-1">Amis<em class="so-n" id="soNReq" hidden></em></button>
+      </div>
+      <div class="panel" id="so-p-msg" role="tabpanel" aria-labelledby="so-t-msg" data-panel="messages"><div id="soInbox"></div></div>
+      <div class="panel" id="so-p-amis" role="tabpanel" aria-labelledby="so-t-amis" data-panel="amis" hidden>
+        <label class="pk-q so-q"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg><input type="search" id="soQ" placeholder="Chercher un pseudo ou un prénom" autocomplete="off" spellcheck="false" autocapitalize="none" enterkeyhint="search" aria-label="Chercher quelqu’un"></label>
+        <div id="soFound" aria-live="polite"></div>
+        <div id="soPeople"></div>
+      </div>
+    </div>
+  </section>
+
   <section class="view" id="v-profile" data-view="profile" aria-label="Profil" hidden>
     <header class="vh"><h1 class="vh-t" tabindex="-1">Profil</h1></header>
     <section class="pf-id" aria-label="Ton profil">
@@ -417,6 +437,7 @@ setTimeout(function(){document.documentElement.classList.remove("boot");var s=do
     <div class="mo-band"><div class="mo-band-in"><p class="mo-k" id="moK"></p><p class="mo-t1">Séance</p><p class="mo-t2">validée</p></div></div>
     <div class="mo-xp"><div class="mo-xpr"><p class="mo-gain" id="moGain">+0 XP</p><p class="mo-lvl" id="moLvl" hidden>Niveau 1</p><p class="mo-rk" id="moRk" hidden><span class="rk-em" id="moRkEm" data-tier="c"><span class="rk-em-in"><span class="rk-em-k">Rang</span><span class="rk-em-l" id="moRkL">C</span></span></span><span class="mo-rk-t"><small>Nouveau rang</small><b id="moRkT">Confirmé</b></span></p></div><div class="mo-bar"><i id="moBar"></i></div></div>
     <button type="button" class="mo-btn" id="moBtn">Continuer</button>
+    <button type="button" class="mo-btn mo-share" id="moShare" hidden>Partager</button>
   </div>
 </div>
 <div id="xpToast" class="xpt" role="status" aria-live="polite"></div>

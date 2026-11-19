@@ -53,6 +53,7 @@ export async function showView(page, v) {
   await page.evaluate((v) => {
     if (document.querySelector('.tabbar')) { const t = document.querySelector(`.tab[data-view="${v}"]`); if (t) t.click(); return; }
     if (v === 'home') { document.getElementById('homeBtn').click(); return; }
+    if (v === 'profile') { document.getElementById('profBtn').click(); return; }   // le Profil est dans la barre du bas
     document.querySelector(`.wh-sl[data-go="${v}"]`).dispatchEvent(new MouseEvent('click', { bubbles: true }));
   }, v);
   await page.waitForTimeout(900);

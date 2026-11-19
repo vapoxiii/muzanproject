@@ -41,7 +41,8 @@ async function open(context) {
   return { page, errors, failed };
 }
 // une partie de l'app : la part de la roue de l'accueil
-const tab = (page, v) => page.evaluate((v) => document.querySelector(`.wh-sl[data-go="${v}"]`).dispatchEvent(new MouseEvent('click', { bubbles: true })), v);
+// (le Profil est dans la barre du bas)
+const tab = (page, v) => page.evaluate((v) => (v === 'profile' ? document.getElementById('profBtn') : document.querySelector(`.wh-sl[data-go="${v}"]`)).dispatchEvent(new MouseEvent('click', { bubbles: true })), v);
 
 test('l’aperçu s’ouvre avec l’exemple, sans erreur, polices et images comprises', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 } });

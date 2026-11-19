@@ -34,8 +34,10 @@ L’ancien `localStorage` n’est pas effacé : revenir à l’ancienne version 
 ## 2. Activer les comptes (Supabase)
 
 1. **Projet** : sur supabase.com, *New project*, région **Europe (Paris ou Francfort)**.
-2. **Base** : *SQL Editor* → colle le contenu de `supabase/migrations/20261026120000_comptes_synchro_ia.sql` → *Run*.
-   Le script peut être rejoué sans risque.
+2. **Base** : *SQL Editor* → colle le contenu de `supabase/migrations/20261026120000_comptes_synchro_ia.sql` → *Run*,
+   puis, dans une nouvelle requête, celui de `supabase/migrations/20261118120000_social.sql` (le Social) → *Run*.
+   Les scripts peuvent être rejoués sans risque. Le Social déjà en place avec seulement le premier script :
+   lance juste le second.
 3. **Connexion par code** : *Authentication → Emails → Templates*. Dans **Magic Link** et dans
    **Confirm signup**, remplace le contenu par un message qui contient le code, par exemple :
 
@@ -119,8 +121,8 @@ L’ancien `localStorage` n’est pas effacé : revenir à l’ancienne version 
   Accueil*), avec le rang et sa marche suivante (« Rang A dans … XP »), le niveau, la barre d’XP en
   segments, sa phrase du jour dans une bulle, et deux infos du jour : la séance (ou le sport, ou le
   repos) et les calories qui restent avec les protéines. Le toucher ouvre une roue de six parts autour
-  de lui : *Progression* en haut, *Training* et *Sports* à droite, *Corps* en bas, *Profil* et
-  *Nutrition* à gauche. On peut aussi appuyer sur lui, glisser jusqu’à une part et lâcher ; au clavier,
+  de lui : *Progression* en haut, *Training* et *Sports* à droite, *Corps* en bas, *Social* et
+  *Nutrition* à gauche (le *Profil* est dans la barre du bas). On peut aussi appuyer sur lui, glisser jusqu’à une part et lâcher ; au clavier,
   Entrée l’ouvre, les flèches passent d’une part à l’autre, Échap la referme. Chaque partie a une
   maison, en bas, qui ramène à l’accueil (roue fermée) ; il n’y a plus de barre d’onglets.
 - **Training, au jour le jour** : l’entrée de *Training*, c’est aujourd’hui. La date, les séances
@@ -180,6 +182,34 @@ L’ancien `localStorage` n’est pas effacé : revenir à l’ancienne version 
   *Mes aliments* (recherche, aliments fréquents) ; la modifier ou la supprimer ne change pas les jours
   déjà notés (l’ancienne version reste pour l’historique). Clé `recettes`, synchronisée ; calculs dans
   `src/nutrition/recettes.js`, écrans dans `src/legacy/20-recettes.js`.
+- **Social** (la roue de l’accueil, à gauche ; il faut un compte, puis un profil social) : un *@pseudo*, un
+  prénom, une couleur, une bio ; compte **privé** par défaut (on accepte chaque abonné), ou public. On
+  cherche quelqu’un par pseudo ou prénom, on le suit (*Demandes* à accepter ou refuser dans *Amis*).
+  - **Stories de 24 h**, en haut : des cartes, pas de photos — dernière séance (exercice par exercice, avec
+    ses records ; une séance cochée sans séries notées montre « fait »), record, rang, série, recette,
+    programme, exercice, ou un mot sur fond de couleur. Visibles par les abonnés acceptés (tout le monde
+    si le compte est public). On y réagit (🔥 💪 👏 😮) ou on répond : ça arrive en message.
+  - **Messages privés** entre personnes qui se suivent l’une l’autre : texte, et les mêmes cartes avec *+*.
+    « Vu » sous son dernier message lu ; la conversation se met à jour toute seule.
+  - **Ajouter chez soi en un geste** : une recette reçue va dans le livre de recettes, un programme ou une
+    séance dans *Mon programme* (sans jour : on les place soi-même ; 14 séances au plus), un exercice
+    dans la séance choisie.
+  - **Partager depuis l’app** : *Partager* à côté de *Continuer* dans « Séance validée » (la séance, ou le
+    nouveau rang), et *Partager avec mes amis* sur la page d’une recette : en story ou à un ami.
+  - **Sécurité** : bloquer (plus d’abonnement ni de messages, dans les deux sens), signaler (raison,
+    copie du contenu, blocage proposé), règles de la communauté acceptées à la création, 15 ans et plus.
+    Jamais de poids, de mesures, de photos ni de calories du jour. *Quitter le social* efface le profil,
+    les abonnements, les stories et les messages ; les données d’entraînement ne bougent pas.
+  - **Pastilles** : messages non lus et demandes, sur le bouton du menu, la part *Social* de la roue
+    et les onglets.
+  - **Modération** (*SQL Editor*) : `select * from public.reports order by created_at desc;` pour les
+    signalements ; `update public.social_profiles set banned = true where handle = 'pseudo';` suspend un
+    compte (il disparaît des recherches, ne peut plus publier ni écrire) ; `delete from public.stories
+    where id = '…';` ou `delete from public.messages where id = '…';` retire un contenu.
+  Le serveur décide de tout ce qui est permis (règles d’accès et fonctions de
+  `supabase/migrations/20261118120000_social.sql`, limites par jour contre le spam) ; écrans dans
+  `src/legacy/21-social.js`, accès au serveur dans `src/social/api.js`, cartes (construites, vérifiées,
+  affichées, importées) dans `src/social/cards.js`.
 - **Poids** (Corps → Mesures) : la courbe suit la tendance lissée (les pesées sont des points) ;
   au-dessus, la tendance du jour et la vitesse sur 3 semaines. Plus on se pèse (3 à 4 fois par semaine),
   plus elle est fiable.
@@ -217,16 +247,17 @@ Structure :
 |---|---|
 | `index.html` | balisage de l’app (l’accueil du personnage, les parties et leurs catégories, la maison) |
 | `src/main.js` | démarrage : stockage, reprise, compte, puis l’app |
-| `src/legacy/NN-*.js` | code d’origine découpé par domaine (programme, séance et séries, semaine, mesures, aliments, calories, photos, scanner, historique, IA, habitudes, accueil, Training du jour, sauvegarde, avatar, profil, onboarding, master avatar, compte). Les fichiers partagent une seule portée et sont mis bout à bout dans l’ordre des noms (greffon dans `vite.config.js`), précédés des imports `TR` (entraînement), `TRUI` (son interface), `TB` (tendance du poids) et `HOME` (roue de l’accueil). |
+| `src/legacy/NN-*.js` | code d’origine découpé par domaine (programme, séance et séries, semaine, mesures, aliments, calories, photos, scanner, historique, IA, habitudes, accueil, Training du jour, sauvegarde, avatar, profil, onboarding, master avatar, compte, cuisine, recettes, Social). Les fichiers partagent une seule portée et sont mis bout à bout dans l’ordre des noms (greffon dans `vite.config.js`), précédés des imports `TR` (entraînement), `TRUI` (son interface), `TB` (tendance du poids), `HOME` (roue de l’accueil), `KIT` (cuisine de la Nutrition), `BRAND` (logo), `RCP` (recettes) et `SOC` (cartes du Social). |
 | `src/training/` | bibliothèque d’exercices et leurs cibles (portion, fonction : `exercises.js`), programme (`program.js`), programme du coach : types, séances par cible, dosage, remplaçants de la même cible (`coach.js`), semaine enregistrée avec l’instantané de son programme (`week.js`), séries, conseil de charge et records (`log.js`), catalogue des sports et leur dépense (`sports.js`), minuteur de repos (`rest.js`) ; `ui/` : constructeur, catalogue et réglages des sports, questions du coach, curseurs, fenêtres, écran de repos (`rest.js` ; ses huit éléments — salle, Ren, boîtier, écran de la montre, décompte, commandes, avancée, carte de la suite — se règlent chacun dans `training.css`, « Écran de repos ») |
 | `src/core/` | stockage (`storage.js`), fusion (`merge.js`), photos, sauvegarde, compte (`auth.js`), synchronisation (`sync.js`, `remote.js`, `cloud.js`), IA (`ai.js`), service worker (`pwa.js`), scanner (`quagga.js`) |
+| `src/social/` | le Social : accès au serveur (`api.js`), cartes partagées (`cards.js`) |
 | `src/home/` | roue de l’accueil : les six parts, la part sous le doigt, la taille selon l’écran, les gestes (toucher, glisser, clavier) (`wheel.js`) |
-| `src/styles/` | `app.css` (système visuel : jetons de couleur, typographie, composants partagés — surtitre, en-tête de section, statut, barre, tuiles —, pages), `training.css` (séance, constructeur, curseurs), `cloud.css` (compte) |
+| `src/styles/` | `app.css` (système visuel : jetons de couleur, typographie, composants partagés — surtitre, en-tête de section, statut, barre, tuiles —, pages), `training.css` (séance, constructeur, curseurs), `cloud.css` (compte), `social.css` (Social) |
 | `src/ui/account.js` | bloc Compte, fenêtre de connexion, bandeaux |
 | `src/assets/` | images extraites de l’ancien fichier (poses de Ren, calques du master avatar), portrait recadré de Ren pour les pastilles du coach, Ren qui montre sa montre (`img/ren-montre.webp`, provisoire : découpé dans la maquette, écran vidé ; la place du cadran sur le poignet tient dans les variables `--rw-*` de `.rr-ren`) |
 | `public/` | icônes, manifeste, QuaggaJS, notice de confidentialité ; `exos/` : une illustration par exercice (480 × 480, nom avec empreinte) |
 | `illustrations/` | demandes envoyées à ChatGPT (`lots.json`, `descriptions.js` ; couvertures de séance, emblèmes de rang, expressions de Ren et écran de repos dans `direction-artistique.js`), planches reçues (`recues/`), cases refaites (`retouches.json`) ; `python3 scripts/illustrations.py` découpe les planches en images d'exercices et écrit `src/training/illus-index.json` |
-| `supabase/` | migration SQL, fonctions `ai` et `account` |
+| `supabase/` | migrations SQL (comptes et synchronisation ; Social), fonctions `ai` et `account` |
 | `tests/` | tests unitaires, de bout en bout, et serveur local de test |
 
 Pour faire évoluer le code d’origine, on peut sortir peu à peu un domaine de `src/legacy/` en vrai module
@@ -262,6 +293,11 @@ Avec PostgreSQL 15+ et le binaire PostgREST 12 installés en local :
 
 ```sh
 export MS_PG=postgres://postgres@127.0.0.1:5432/postgres MS_POSTGREST=/chemin/vers/postgrest
-npm test               # + migration sur un vrai PostgreSQL et serveur complet sans navigateur
-npm run test:e2e:cloud # deux navigateurs, un compte : connexion, reprise, synchro, IA, photos, suppression
+npm test               # + migrations sur un vrai PostgreSQL (dont le Social : demandes, visibilité,
+                       #   messages, blocage, bannissement, limites) et serveur complet sans navigateur
+npm run test:e2e:cloud # deux navigateurs, un compte : connexion, reprise, synchro, IA, photos, suppression ;
+                       # Social à deux comptes : profils, demande acceptée, story et réaction, programme
+                       # envoyé puis ajouté, « Séance validée » partagée, message, blocage
+CAPTURES=1 npx playwright test -c playwright.cloud.config.js tests/e2e-cloud/zz-social-shots.spec.js
+                       # captures des écrans du Social à trois comptes (.tmp/social/)
 ```

@@ -3,7 +3,7 @@ import { WHEEL_PARTS, polar, sectorPath, partAt, wheelLayout } from '../../src/h
 
 describe('roue de l’accueil', () => {
   it('six parts, Progression en haut, Training à droite, Nutrition à gauche', () => {
-    expect(WHEEL_PARTS.map((p) => p.k)).toEqual(['progress', 'training', 'sports', 'body', 'profile', 'nutrition']);
+    expect(WHEEL_PARTS.map((p) => p.k)).toEqual(['progress', 'training', 'sports', 'body', 'social', 'nutrition']);
     const at = (k) => WHEEL_PARTS.find((p) => p.k === k).a;
     expect(at('progress')).toBe(90);
     expect(Math.cos(at('training') * Math.PI / 180)).toBeGreaterThan(0);
@@ -19,9 +19,9 @@ describe('roue de l’accueil', () => {
     expect(k(0, -120)).toBe('body');             // en dessous
     expect(k(110, 60)).toBe('training');         // en haut à droite
     expect(k(110, -60)).toBe('sports');          // en bas à droite
-    expect(k(-110, -60)).toBe('profile');        // en bas à gauche
+    expect(k(-110, -60)).toBe('social');        // en bas à gauche
     expect(k(-110, 60)).toBe('nutrition');       // en haut à gauche
-    expect(['nutrition', 'profile']).toContain(k(-150, 0));   // pile entre deux parts : l'une des deux, pas de trou
+    expect(['nutrition', 'social']).toContain(k(-150, 0));   // pile entre deux parts : l'une des deux, pas de trou
     expect(k(-150, 2)).toBe('nutrition');        // un peu au-dessus : la plus proche
     expect(k(20, 20)).toBe(null);                // sur le personnage du centre
     expect(k(0, 205)).toBe('progress');          // juste au-delà du bord : encore accepté

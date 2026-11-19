@@ -11,18 +11,20 @@ const ICONS = {
   sports: '<circle cx="12" cy="12" r="8.5"/><path d="M12 8.4l3.1 2.3-1.2 3.6h-3.8l-1.2-3.6zM12 3.5v4.9M15.1 10.7l4.5-1.6M13.9 14.3l2.7 3.9M10.1 14.3l-2.7 3.9M8.9 10.7 4.4 9.1"/>',
   body: '<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 9.5a4.5 4.5 0 0 1 6 0M12 9.8l1.3-1.6"/>',
   profile: '<circle cx="12" cy="8.2" r="3.6"/><path d="M5 20c1.1-3.6 3.9-5.6 7-5.6s5.9 2 7 5.6"/>',
+  social: '<circle cx="9" cy="8.6" r="3.2"/><path d="M3.4 19.2c.9-3.3 3-5 5.6-5s4.7 1.7 5.6 5"/><circle cx="16.7" cy="9.6" r="2.5"/><path d="M15.6 14.5c2.5-.4 4.4 1.1 5.2 4.1"/>',
   nutrition: '<path d="M7 3.5v7.5M5 3.5V8a2 2 0 0 0 4 0V3.5M7 11v9.5M16.5 3.5c-1.8 0-3 2.2-3 5.2 0 2.6 1.2 3.8 3 3.8v8"/>',
 };
 export const partIcon = (k, size = 24) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[k] || ''}</svg>`;
 
 // Les parts, dans le sens des aiguilles d'une montre depuis le haut. a : angle du milieu de la
 // part, en degrés (0 à droite, 90 en haut). Nutrition à gauche, Training à droite, Progression en haut.
+// Le Profil est dans la barre du bas : sa part est devenue le Social (stories, messages, amis).
 export const WHEEL_PARTS = [
   { k: 'progress', n: 'Progression', a: 90 },
   { k: 'training', n: 'Training', a: 30 },
   { k: 'sports', n: 'Sports', a: -30 },
   { k: 'body', n: 'Corps', a: -90 },
-  { k: 'profile', n: 'Profil', a: -150 },
+  { k: 'social', n: 'Social', a: -150 },
   { k: 'nutrition', n: 'Nutrition', a: 150 },
 ];
 const GAP = 1.5;      // demi-écart entre deux parts, en degrés
@@ -77,7 +79,7 @@ export function mountWheel({ host, trigger, parts = WHEEL_PARTS, centerSrc = () 
     g.setAttribute('class', 'wh-sl'); g.setAttribute('role', 'menuitem'); g.setAttribute('tabindex', '-1'); g.setAttribute('aria-label', p.n);
     g.dataset.go = p.k;
     const path = document.createElementNS(SVGNS, 'path'); g.appendChild(path); svg.appendChild(g);
-    const lab = el('span', 'wh-l'); lab.setAttribute('aria-hidden', 'true'); lab.innerHTML = partIcon(p.k, 26) + '<span>' + p.n + '</span>';
+    const lab = el('span', 'wh-l'); lab.setAttribute('aria-hidden', 'true'); lab.dataset.go = p.k; lab.innerHTML = partIcon(p.k, 26) + '<span>' + p.n + '</span>';
     wheel.appendChild(lab);
     const it = { ...p, g, path, lab };
     g.addEventListener('click', () => choose(it));

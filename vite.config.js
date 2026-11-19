@@ -34,6 +34,7 @@ function legacyApp() {
           "import * as KIT from '/src/nutrition/kitchen.js';\n" +
           "import * as BRAND from '/src/ui/brand.js';\n" +
           "import * as RCP from '/src/nutrition/recettes.js';\n" +
+          "import * as SOC from '/src/social/cards.js';\n" +
           "import { MASTER_IMG_URLS } from '/src/assets/master/index.js';\n"
         ),
       });

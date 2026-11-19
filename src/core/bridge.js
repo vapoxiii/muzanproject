@@ -6,6 +6,7 @@ import { aiCall, accountAiReady } from './ai.js';
 import { photosAll, addPhoto, removePhoto } from './photos.js';
 import { buildBackup, parseBackup, restoreBackup, downloadJSON } from './backup.js';
 import { loadQuagga } from './quagga.js';
+import { social } from '../social/api.js';
 
 const hooks = { openAccount: null };
 
@@ -31,6 +32,8 @@ export const MS = {
     restore: (parsed) => restoreBackup(parsed),
   },
   loadQuagga: () => loadQuagga(),
+  // le social (profils, abonnements, stories, messages) : src/social/api.js
+  social,
   openAccount(opts) { if (hooks.openAccount) hooks.openAccount(opts || {}); },
 };
 

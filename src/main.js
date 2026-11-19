@@ -14,6 +14,7 @@ import '@fontsource/inter/latin-900.css';
 import './styles/app.css';
 import './styles/cloud.css';
 import './styles/training.css';
+import './styles/social.css';
 
 import { applyWaitingUpdate, reloadIfStale, registerSW } from './core/pwa.js';
 import { initStorage, storageInfo } from './core/storage.js';

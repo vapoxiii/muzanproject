@@ -45,7 +45,7 @@ test('accueil : Ren, sa phrase et les infos du jour ; la roue au toucher, en gli
   const rb = await ren.boundingBox();
   await page.touchscreen.tap(rb.x + rb.width / 2, rb.y + rb.height * 0.3);
   await expect(ren).toHaveAttribute('aria-expanded', 'true');
-  expect(await page.locator('.wh-sl').evaluateAll((g) => g.map((x) => x.getAttribute('aria-label')))).toEqual(['Progression', 'Training', 'Sports', 'Corps', 'Profil', 'Nutrition']);
+  expect(await page.locator('.wh-sl').evaluateAll((g) => g.map((x) => x.getAttribute('aria-label')))).toEqual(['Progression', 'Training', 'Sports', 'Corps', 'Social', 'Nutrition']);
   await expect(page.locator('.wh-title')).toHaveText('Où on va ?');
   // toucher à côté de l'anneau : elle se referme
   await page.waitForTimeout(450);

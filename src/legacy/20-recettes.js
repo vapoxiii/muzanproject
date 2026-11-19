@@ -135,7 +135,8 @@ function openRecipeSheet(id) {
     (r.prep ? '<p class="pe-lab">Préparation</p><p class="rc-prep">' + esc(r.prep).replace(/\n/g, '<br>') + '</p>' : '') +
     '<div class="rc-eat"><div class="qty" role="group" aria-label="Parts mangées"><button type="button" data-d="-1" aria-label="Une demi-part de moins">−</button><span aria-live="polite"></span><button type="button" data-d="1" aria-label="Une demi-part de plus">+</button></div>' +
     '<button type="button" class="tr-btn rc-eat-go" data-act="eat"></button></div>' +
-    '<button type="button" class="tr-btn ghost wide rc-edit" data-act="edit">' + TRUI.ICON.edit + '<span>Modifier la recette</span></button>';
+    '<button type="button" class="tr-btn ghost wide rc-edit" data-act="edit">' + TRUI.ICON.edit + '<span>Modifier la recette</span></button>' +
+    (MS.social.available() ? '<button type="button" class="tr-btn ghost wide rc-share" data-act="share"><span>Partager avec mes amis</span></button>' : '');
   const close = TRUI.openLayer(node, { label: r.n });
   const qn = node.querySelector('.rc-eat .qty span'), go = node.querySelector('.rc-eat-go');
   const upd = () => { qn.textContent = recParts(parts); go.textContent = 'Ajouter · ' + nf(pp.k * parts) + ' kcal'; };
@@ -146,6 +147,7 @@ function openRecipeSheet(id) {
     if (act === 'close') close();
     else if (act === 'eat') { close(); recLog(r, parts); }
     else if (act === 'edit') { close(); openRecipeEditor(r.id); }
+    else if (act === 'share') { close(); socialShare('recette', SOC.recipeCard(r)); }
   });
   upd();
 }

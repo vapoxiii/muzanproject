@@ -185,6 +185,7 @@ html.tr-lock, html.tr-lock body{overflow:hidden}
 .pk-q{display:flex; align-items:center; gap:8px; height:48px; padding:0 14px; border:1.5px solid transparent; border-radius:12px; background:var(--surf2); color:var(--muted2)}
 .pk-q:focus-within{border-color:var(--hot1)}
 .pk-q input{flex:1; min-width:0; height:100%; border:0; background:none; color:var(--txt); font-size:16px; font-weight:500; outline:none}
+.pk-q input:focus{box-shadow:none}   /* le cadre du champ montre déjà le focus */
 .pk-chips{display:flex; gap:6px; margin:10px -16px 0; padding:0 16px 2px; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch}
 .pk-chips::-webkit-scrollbar{display:none}
 .pk-chips button{flex:0 0 auto; min-height:34px; padding:0 13px; border:0; border-radius:999px; background:var(--surf2); color:var(--txt); font-size:13px; font-weight:600; white-space:nowrap; cursor:pointer}
